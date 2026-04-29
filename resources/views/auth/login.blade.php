@@ -26,30 +26,21 @@
 
                 <!-- Teks Sebelah Kiri -->
                 <section class="max-w-xl animate-fade-up [--animation-delay:0.1s]">
-                    <div
-                        class="mb-5 inline-flex items-center gap-3 rounded-full border border-white/70 bg-white/55 px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                        <span class="h-2.5 w-2.5 rounded-full bg-orange-500"></span>
-                        Portal Login POLTREE
-                    </div>
-
                     <h1 class="max-w-lg text-4xl font-extrabold leading-tight tracking-tight text-[#091057] sm:text-5xl">
                         Selamat Datang!
                     </h1>
+
+                    <div class="mt-2 hidden max-w-md gap-3 sm:grid">
+                        <div
+                            class="rounded-2xl border border-white/70 bg-white/45 px-4 py-3 text-sm text-slate-700 shadow-[0_14px_36px_rgba(15,23,42,0.08)] backdrop-blur-md">
+                            Akses cepat untuk dosen dan mahasiswa dalam satu portal yang lebih ringkas.
+                        </div>
+                    </div>
 
                     <p class="mt-4 max-w-md text-lg leading-8 text-slate-700 sm:text-xl">
                         Masukkan Email Portal dan Password Anda untuk melanjutkan ke sistem.
                     </p>
 
-                    <div class="mt-8 hidden max-w-md gap-3 sm:grid">
-                        <div
-                            class="rounded-2xl border border-white/70 bg-white/45 px-4 py-3 text-sm text-slate-700 shadow-[0_14px_36px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                            Akses cepat untuk dosen dan mahasiswa dalam satu portal yang lebih ringkas.
-                        </div>
-                        <div
-                            class="rounded-2xl border border-white/70 bg-white/40 px-4 py-3 text-sm text-slate-600 shadow-[0_14px_36px_rgba(15,23,42,0.06)] backdrop-blur-md">
-                            Tampilan login sudah dipadatkan supaya nyaman di laptop maupun mobile.
-                        </div>
-                    </div>
                 </section>
 
                 <!-- Form Glassmorphism Sebelah Kanan -->
@@ -57,7 +48,7 @@
                     class="w-full max-w-sm animate-fade-in rounded-[28px] border border-white/75 bg-white/28 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.14)] backdrop-blur-xl [--animation-delay:0.25s] sm:p-6"
                     aria-label="Form login">
                     <div class="mb-5">
-                        <h2 class="text-xl font-bold text-[#091057]">Masuk ke POLTREE</h2>
+                        <h2 class="text-xl font-bold text-(--blue-primary)">Masuk ke POLTREE</h2>
                         <p class="mt-1 text-sm leading-6 text-slate-600">Gunakan akun Anda untuk mengakses layanan kampus.
                         </p>
                     </div>
@@ -80,7 +71,7 @@
                             <label for="email" class="sr-only">Email Portal</label>
                             <div class="group relative">
                                 <span
-                                    class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-orange-500">
+                                    class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-(--orange-primary)">
                                     <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path
                                             d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
@@ -89,7 +80,7 @@
                                 </span>
                                 <input id="email" type="email" name="email" autocomplete="email"
                                     value="{{ old('email') }}" placeholder="email@polibatam.ac.id" required autofocus
-                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
+                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-(--blue-primary) focus:bg-white focus:ring-4 focus:ring-(--blue-primary)/10">
                             </div>
                         </div>
 
@@ -98,7 +89,7 @@
                             <label for="password" class="sr-only">Kata Sandi</label>
                             <div class="group relative">
                                 <span
-                                    class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-orange-500">
+                                    class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-(--orange-primary)">
                                     <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path
                                             d="M7 14q-1.25 0-2.125-.875T4 11t.875-2.125T7 8t2.125.875T10 11t-.875 2.125T7 14m0 4q-2.9 0-4.95-2.05T0 11t2.05-4.95T7 4q2.5 0 4.463 1.45T14.2 9H21l2 2-3 3-2-2-2 2-2-2H14.2q-.775 2.1-2.737 3.55T7 18z"
@@ -107,17 +98,17 @@
                                 </span>
                                 <input id="password" type="password" name="password" autocomplete="current-password"
                                     placeholder="Password" required
-                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
+                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-(--blue-primary) focus:bg-white focus:ring-4 focus:ring-(--blue-primary)/10">
                             </div>
                         </div>
 
                         <button type="submit"
-                            class="mt-2 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-[#091057] text-sm font-semibold tracking-[0.03em] text-white shadow-[0_14px_30px_rgba(9,16,87,0.24)] transition duration-200 hover:bg-[#0d1a7a] hover:shadow-[0_18px_34px_rgba(9,16,87,0.28)] active:scale-[0.99]">
+                            class="mt-2 inline-flex h-12 w-full items-center justify-center rounded-2xl bg-(--blue-primary) text-sm font-semibold tracking-[0.03em] text-white shadow-[0_14px_30px_rgba(9,16,87,0.24)] transition duration-200 hover:bg-(--blue-secondary) hover:shadow-[0_18px_34px_rgba(9,16,87,0.28)] active:scale-[0.99]">
                             Masuk
                         </button>
 
                         <span
-                            class="block pt-1 text-center text-sm font-medium text-blue-800 hover:text-[#091057] cursor-pointer transition">
+                            class="block pt-1 text-center text-sm font-medium text-blue-800 hover:text-(--blue-primary) cursor-pointer transition">
                             Lupa password?
                         </span>
                     </form>

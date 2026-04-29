@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -16,26 +18,39 @@ class AuthController extends Controller
     // Memproses data login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        // 1. Pastikan kolom tidak kosong
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
         ]);
 
-        // Jika email dan password cocok di tabel users
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        // 2. Cari email di database
+        $user = User::where('email', $request->email)->first();
 
-            // Arahkan ke dashboard
-            return redirect()->intended('dashboard');
+        // Jika email TIDAK ADA di database
+        if (!$user) {
+            return back()->withErrors([
+                'email' => 'Email tidak terdaftar',
+            ])->onlyInput('email');
         }
 
-        // Jika salah, kembalikan ke halaman login dengan pesan error
-        return back()->withErrors([
-            'email' => 'Email atau password yang kamu masukkan salah.',
-        ])->onlyInput('email');
+        // 3. Jika email ada, cocokkan password-nya
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors([
+                'password' => 'Password salah.',
+            ])->onlyInput('email');
+        }
+
+        // 4. email & password benar, masuk
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->intended('dashboard');
     }
 
-    // Memproses logout
     public function logout(Request $request)
     {
         Auth::logout();
