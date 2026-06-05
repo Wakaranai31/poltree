@@ -2,39 +2,35 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Koki Layanan & Kategori
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\KategoriSpesialController;
 use App\Http\Controllers\LayananSpesialController;
 use App\Http\Controllers\LayananFavoritController;
 
-// Koki Auth & Dashboard Baru
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 
-// Halaman Utama Portal (Bisa diarahkan ke login atau halaman selamat datang)
+// Halaman Utama Portal
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// -----------------------------------------------------------------------
-// RUTE TAMU (Belum Login)
+// Route belum login
 // -----------------------------------------------------------------------
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-// -----------------------------------------------------------------------
-// RUTE PENGGUNA (Sudah Login)
+// Route sudah login
 // -----------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
     // Auth & Dashboard
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Master Data (Kategori & Layanan)
+    // Kategori & Layanan
     Route::resource('kategori', KategoriController::class);
     Route::resource('layanan', LayananController::class);
     Route::resource('kategori-spesial', KategoriSpesialController::class);

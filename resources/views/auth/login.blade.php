@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Kita ambil bagian <main> dari temanmu dan masukkan ke sini -->
+
     <div class="relative isolate flex min-h-screen overflow-hidden w-full">
 
         <!-- Background Kampus (Disesuaikan path-nya ke folder png) -->
@@ -13,7 +13,7 @@
             aria-hidden="true"></div>
 
         <!-- Dekorasi Bulatan Blur -->
-        <div class="pointer-events-none absolute -left-24 bottom-[-7rem] h-[22rem] w-[28rem] rounded-[60%_40%_55%_45%/50%_60%_40%_50%] bg-white/55 blur-[2px]"
+        <div class="pointer-events-none absolute -left-24 -bottom-28 h-88 w-md rounded-[60%_40%_55%_45%/50%_60%_40%_50%] bg-white/55 blur-[2px]"
             aria-hidden="true"></div>
         <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-72 rounded-[45%_55%_40%_60%/55%_45%_60%_40%] bg-white/40"
             aria-hidden="true"></div>
@@ -26,20 +26,19 @@
 
                 <!-- Teks Sebelah Kiri -->
                 <section class="max-w-xl animate-fade-up [--animation-delay:0.1s]">
-                    <h1 class="max-w-lg text-4xl font-extrabold leading-tight tracking-tight text-[#091057] sm:text-5xl">
+                    <h1 class="max-w-lg text-7xl font-extrabold leading-tight tracking-tight text-(--blue-primary)">
                         Selamat Datang!
                     </h1>
 
-                    <div class="mt-2 hidden max-w-md gap-3 sm:grid">
+                    <div class="mt-2 hidden max-w-sm gap-3 sm:grid">
                         <div
-                            class="rounded-2xl border border-white/70 bg-white/45 px-4 py-3 text-sm text-slate-700 shadow-[0_14px_36px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                            Akses cepat untuk dosen dan mahasiswa dalam satu portal yang lebih ringkas.
+                            class="rounded-2xl border border-white/70 bg-white/45 px-4 py-3 shadow-[0_14px_36px_rgba(15,23,42,0.08)] backdrop-blur-md">
+                            <p class="mt-2 mb-2 max-w-md text-lg leading-8 text-slate-700 sm:text-xl">
+                                Akses cepat dalam satu portal yang lebih ringkas.
+                            </p>
                         </div>
                     </div>
 
-                    <p class="mt-4 max-w-md text-lg leading-8 text-slate-700 sm:text-xl">
-                        Masukkan Email Portal dan Password Anda untuk melanjutkan ke sistem.
-                    </p>
 
                 </section>
 
