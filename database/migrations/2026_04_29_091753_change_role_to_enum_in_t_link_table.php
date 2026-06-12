@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tag', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('t_link', function (Blueprint $table) {
+            $table->enum('role', ['Dosen', 'Tata Usaha', 'Laboran'])->nullable()->change();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tag');
+        Schema::table('t_link', function (Blueprint $table) {
+            $table->string('role')->nullable()->change();
+        });
     }
 };

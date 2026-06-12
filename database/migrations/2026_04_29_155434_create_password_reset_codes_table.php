@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('layanan', function (Blueprint $table) {
+        Schema::create('password_reset_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kategori_id')->constrained('kategori')->onDelete('cascade');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('url');
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('layanan');
+        Schema::dropIfExists('password_reset_codes');
     }
 };

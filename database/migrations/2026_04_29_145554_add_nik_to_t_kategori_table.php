@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tag_digunakan', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('t_kategori', function (Blueprint $table) {
+            $table->string('nik', 50)->nullable()->after('id_kategori');
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tag_digunakan');
+        Schema::table('t_kategori', function (Blueprint $table) {
+            $table->dropColumn('nik');
+        });
     }
 };
