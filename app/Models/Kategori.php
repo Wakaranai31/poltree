@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Kategori extends Model
 {
-use HasFactory;
+    protected $table = 't_kategori';
 
-    protected $table = 'kategori';
+    protected $primaryKey = 'id_kategori';
 
-    protected $fillable = ['name', 'description'];
+    public $timestamps = false;
 
-    public function layanan()
+    protected $fillable = ['id_kategori', 'nama_kategori', 'nik', 'icon'];
+
+    public function links()
     {
-        return $this->hasMany(Layanan::class, 'kategori_id');
+        return $this->hasMany(Link::class, 'id_kategori', 'id_kategori');
     }
 }
