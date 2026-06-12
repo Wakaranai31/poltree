@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,30 +11,26 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Seed the application's database.
+     *
+     * Urutan seeder disesuaikan dengan dependensi foreign key:
+     * 1. Admin       → t_admin (tidak ada FK)
+     * 2. Pengguna    → t_pengguna (tidak ada FK)
+     * 3. Kategori    → t_kategori (tidak ada FK)
+     * 4. Tag         → t_tag (tidak ada FK)
+     * 5. Link        → t_link (FK ke t_kategori)
+     * 6. LinkTag     → t_link_tag (FK ke t_link & t_tag)
+     * 7. Laporan     → t_laporan (FK ke t_pengguna)
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        User::create([
-            'name' => 'admin',
-            'username' => 'admin_polbat',
-            'email' => 'admin@polibatam.ac.id',
-            'password' => Hash::make('admin123'),
-            'role' => 'admin',
-        ]);
-
-        User::create([
-            'name' => 'user',
-            'username' => 'user_polbat',
-            'email' => 'user@polibatam.ac.id',
-            'password' => Hash::make('user123'),
-            'role' => 'user',
+        $this->call([
+            AdminSeeder::class,
+            PenggunaSeeder::class,
+            KategoriSeeder::class,
+            TagSeeder::class,
+            LinkSeeder::class,
+            LinkTagSeeder::class,
+            LaporanSeeder::class,
         ]);
     }
 }
