@@ -1,44 +1,94 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\LinkController as AdminLinkController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Pengguna\DashboardController as PenggunaDashboardController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\LayananController;
-use App\Http\Controllers\KategoriSpesialController;
-use App\Http\Controllers\LayananSpesialController;
-use App\Http\Controllers\LayananFavoritController;
-
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-
-// Halaman Utama Portal
+// Root -> login
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Route belum login
-// -----------------------------------------------------------------------
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+// Auth
+Route::middleware('guest:admin,pengguna')->group(function () {
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store']);
+    
+    // Forgot Password Flow
+    Route::get('/forgot-password', [LoginController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [LoginController::class, 'handleForgotPassword'])->name('password.email');
+    Route::get('/reset-password/{token}', [LoginController::class, 'showResetPassword'])->name('password.reset');
+    Route::post('/reset-password', [LoginController::class, 'handleResetPassword'])->name('password.update.post');
 });
 
-// Route sudah login
-// -----------------------------------------------------------------------
-Route::middleware('auth')->group(function () {
-    // Auth & Dashboard
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
-    // Kategori & Layanan
-    Route::resource('kategori', KategoriController::class);
-    Route::resource('layanan', LayananController::class);
-    Route::resource('kategori-spesial', KategoriSpesialController::class);
-    Route::resource('layanan-spesial', LayananSpesialController::class);
+// Dashboard Pengguna
+Route::middleware('auth:pengguna')->group(function () {
+    Route::get('/dashboard', [PenggunaDashboardController::class, 'pengguna'])
+        ->name('pengguna.dashboard');
+    Route::put('/pengguna/password', [PenggunaDashboardController::class, 'updatePenggunaPassword'])
+        ->name('pengguna.password.update');
+    Route::post('/pengguna/links', [PenggunaDashboardController::class, 'storeUserLink'])
+        ->name('pengguna.links.store');
+    Route::post('/pengguna/categories', [PenggunaDashboardController::class, 'storeUserCategory'])
+        ->name('pengguna.categories.store');
+    Route::put('/pengguna/categories/{id}', [PenggunaDashboardController::class, 'updateUserCategory'])
+        ->name('pengguna.categories.update');
+    Route::delete('/pengguna/categories/{id}', [PenggunaDashboardController::class, 'deleteUserCategory'])
+        ->name('pengguna.categories.destroy');
+    Route::put('/pengguna/links/{id}', [PenggunaDashboardController::class, 'updateUserLink'])
+        ->name('pengguna.links.update');
+    Route::delete('/pengguna/links/{id}', [PenggunaDashboardController::class, 'deleteUserLink'])
+        ->name('pengguna.links.destroy');
+    Route::post('/pengguna/profile', [PenggunaDashboardController::class, 'updateProfile'])
+        ->name('pengguna.profile.update');
+});
 
-    // Layanan Favorit
-    Route::get('/layanan-favorit', [LayananFavoritController::class, 'index'])->name('layanan-favorit.index');
-    Route::post('/layanan-favorit/toggle', [LayananFavoritController::class, 'toggle'])->name('layanan-favorit.toggle');
-    Route::put('/layanan-favorit/{layananFavorit}/kategori', [LayananFavoritController::class, 'updateCategory'])->name('layanan-favorit.updateCategory');
-    Route::delete('/layanan-favorit/{layananFavorit}', [LayananFavoritController::class, 'destroy'])->name('layanan-favorit.destroy');
+// Dashboard Admin
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'admin'])
+        ->name('admin.dashboard');
+    Route::get('/admin/services', [AdminServiceController::class, 'adminServices'])
+        ->name('admin.services');
+    Route::get('/admin/links', [AdminLinkController::class, 'adminLinks'])
+        ->name('admin.links');
+    Route::post('/admin/links', [AdminLinkController::class, 'storeLink'])
+        ->name('admin.links.store');
+    Route::put('/admin/links/{id}', [AdminLinkController::class, 'updateLink'])
+        ->name('admin.links.update');
+    Route::delete('/admin/links/{id}', [AdminLinkController::class, 'deleteLink'])
+        ->name('admin.links.destroy');
+    Route::post('/admin/links/check', [AdminLinkController::class, 'checkAllLinks'])
+        ->name('admin.links.check');
+    Route::get('/admin/users', [AdminUserController::class, 'adminUsers'])
+        ->name('admin.users');
+    Route::post('/admin/users', [AdminUserController::class, 'storeUser'])
+        ->name('admin.users.store');
+    Route::post('/admin/users/import', [AdminUserController::class, 'importUsers'])
+        ->name('admin.users.import');
+    Route::get('/admin/users/import/template', [AdminUserController::class, 'downloadTemplate'])
+        ->name('admin.users.template');
+    Route::put('/admin/users/{nik}', [AdminUserController::class, 'updateUser'])
+        ->name('admin.users.update');
+    Route::delete('/admin/users/{nik}', [AdminUserController::class, 'deleteUser'])
+        ->name('admin.users.destroy');
+    Route::get('/admin/categories', [AdminCategoryController::class, 'adminCategories'])->name('admin.categories');
+    Route::post('/admin/categories', [AdminCategoryController::class, 'storeCategory'])->name('admin.categories.store');
+    Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'updateCategory'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'deleteCategory'])->name('admin.categories.destroy');
+    Route::get('/admin/tags', [AdminTagController::class, 'adminTags'])->name('admin.tags');
+    Route::post('/admin/tags', [AdminTagController::class, 'storeTag'])->name('admin.tags.store');
+    Route::put('/admin/tags/{id}', [AdminTagController::class, 'updateTag'])->name('admin.tags.update');
+    Route::delete('/admin/tags/{id}', [AdminTagController::class, 'deleteTag'])->name('admin.tags.destroy');
+    Route::put('/admin/password', [AdminDashboardController::class, 'updateAdminPassword'])->name('admin.password.update');
+    Route::post('/admin/profile', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/admin/api-checker', [AdminDashboardController::class, 'apiChecker'])->name('admin.api-checker');
+    Route::post('/admin/api-checker', [AdminDashboardController::class, 'runApiChecker'])->name('admin.api-checker.run');
 });
