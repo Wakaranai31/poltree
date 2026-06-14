@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'link_status_monitor' => [
+        'timeout' => env('LINK_STATUS_TIMEOUT', 10),
+        'connect_timeout' => env('LINK_STATUS_CONNECT_TIMEOUT', 5),
+        'retries' => env('LINK_STATUS_RETRIES', 1),
+        'verify_ssl' => env('LINK_STATUS_VERIFY_SSL', true),
+        'user_agent' => env('LINK_STATUS_USER_AGENT', 'POLTREE Link Monitor/1.0'),
+    ],
+
 ];
