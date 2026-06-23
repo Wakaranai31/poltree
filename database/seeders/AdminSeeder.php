@@ -19,6 +19,7 @@ class AdminSeeder extends Seeder
                 'username'  => 'admin1',
                 'nama'      => 'admin1',
                 'email'     => null,
+                'foto'      => null,
                 'password'  => Hash::make('Admin23'),
             ],
         ]);

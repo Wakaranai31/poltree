@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,17 +21,22 @@ class DatabaseSeeder extends Seeder
      * 5. Link        → t_link (FK ke t_kategori)
      * 6. LinkTag     → t_link_tag (FK ke t_link & t_tag)
      * 7. Laporan     → t_laporan (FK ke t_pengguna)
+     *
+     * Dibungkus dalam transaction untuk atomicity:
+     * jika satu seeder gagal, semua perubahan di-rollback.
      */
     public function run(): void
     {
-        $this->call([
-            AdminSeeder::class,
-            PenggunaSeeder::class,
-            KategoriSeeder::class,
-            TagSeeder::class,
-            LinkSeeder::class,
-            LinkTagSeeder::class,
-            LaporanSeeder::class,
-        ]);
+        DB::transaction(function () {
+            $this->call([
+                AdminSeeder::class,
+                PenggunaSeeder::class,
+                KategoriSeeder::class,
+                TagSeeder::class,
+                LinkSeeder::class,
+                LinkTagSeeder::class,
+                LaporanSeeder::class,
+            ]);
+        });
     }
 }

@@ -23,6 +23,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'maria.ipp@polibatam.ac.id',
                 'jabatan'   => 'Dosen',
+                'foto'      => null,
             ],
             [
                 'nik'       => 115143,
@@ -31,6 +32,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'ahmad.thohari@polibatam.ac.id',
                 'jabatan'   => 'Dosen',
+                'foto'      => null,
             ],
             [
                 'nik'       => 122288,
@@ -39,6 +41,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'festy.winda@polibatam.ac.id',
                 'jabatan'   => 'Dosen',
+                'foto'      => null,
             ],
             [
                 'nik'       => 218292,
@@ -47,6 +50,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'dede.nurdiansyah@polibatam.ac.id',
                 'jabatan'   => 'Tata Usaha',
+                'foto'      => null,
             ],
             [
                 'nik'       => 224345,
@@ -55,6 +59,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'rhanna.mawira@polibatam.ac.id',
                 'jabatan'   => 'Tata Usaha',
+                'foto'      => null,
             ],
             [
                 'nik'       => 225359,
@@ -63,6 +68,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'miftahul.husna@polibatam.ac.id',
                 'jabatan'   => 'Laboran',
+                'foto'      => null,
             ],
             [
                 'nik'       => 225361,
@@ -71,6 +77,7 @@ class PenggunaSeeder extends Seeder
                 'password'  => $password,
                 'email'     => 'yogi.ilhami@polibatam.ac.id',
                 'jabatan'   => 'Laboran',
+                'foto'      => null,
             ],
         ]);
     }

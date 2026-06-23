@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Advanced database features: audit log table, triggers, stored procedures,
+     * stored functions, and check constraints.
      */
     public function up(): void
     {
-        // 1. Create Audit Logs Table (t_audit_log)
+        // 1. Create Audit Logs Table
         if (!Schema::hasTable('t_audit_log')) {
             Schema::create('t_audit_log', function (Blueprint $table) {
                 $table->id();
@@ -22,15 +23,20 @@ return new class extends Migration
                 $table->text('old_value')->nullable();
                 $table->text('new_value')->nullable();
                 $table->timestamp('created_at')->useCurrent();
+
+                // Indexes untuk query audit
+                $table->index('table_name');
+                $table->index('created_at');
+                $table->index(['table_name', 'record_id']);
             });
         }
 
-        // 2. Drop existing triggers/procedures/functions if any
+        // 2. Drop existing triggers/procedures/functions (idempotent)
         DB::unprepared("DROP TRIGGER IF EXISTS trg_after_link_update");
         DB::unprepared("DROP PROCEDURE IF EXISTS sp_get_dashboard_statistics");
         DB::unprepared("DROP FUNCTION IF EXISTS sf_get_category_link_count");
 
-        // 3. Create Trigger: AFTER UPDATE on t_link to log changes in t_audit_log
+        // 3. Create Trigger: AFTER UPDATE on t_link → log to t_audit_log
         DB::unprepared("
             CREATE TRIGGER trg_after_link_update
             AFTER UPDATE ON t_link
@@ -50,7 +56,6 @@ return new class extends Migration
         ");
 
         // 4. Create Stored Procedure: sp_get_dashboard_statistics
-        // Calculates total links, active links, avg response time, and most active category using a subquery and aggregate.
         DB::unprepared("
             CREATE PROCEDURE sp_get_dashboard_statistics(
                 OUT out_total_links INT,
@@ -106,8 +111,7 @@ return new class extends Migration
             END
         ");
 
-        // 6. Add CHECK Constraint to t_link status column (MySQL 8.0 support check constraints natively)
-        // Ensure status can only be 'aktif' or 'bermasalah'
+        // 6. Add CHECK Constraint (MySQL 8.0+)
         try {
             DB::unprepared("
                 ALTER TABLE t_link
@@ -115,13 +119,10 @@ return new class extends Migration
                 CHECK (status IN ('aktif', 'bermasalah'))
             ");
         } catch (\Throwable $e) {
-            // Log or fallback if some older MySQL version doesn't support CHECK constraint natively
+            // Fallback: older MySQL versions may not support CHECK constraints
         }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         DB::unprepared("DROP TRIGGER IF EXISTS trg_after_link_update");
