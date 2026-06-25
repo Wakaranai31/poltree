@@ -16,8 +16,8 @@ class AdminSeeder extends Seeder
         DB::table('t_admin')->insert([
             [
                 'nik_admin' => 222336,
-                'username'  => 'admin1',
-                'nama'      => 'admin1',
+                'username'  => 'Administrator',
+                'nama'      => 'Administrator',
                 'email'     => null,
                 'foto'      => null,
                 'password'  => Hash::make('Admin23'),

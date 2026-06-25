@@ -11,7 +11,6 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
      *
      * Urutan seeder disesuaikan dengan dependensi foreign key:
      * 1. Admin       → t_admin (tidak ada FK)
@@ -20,7 +19,6 @@ class DatabaseSeeder extends Seeder
      * 4. Tag         → t_tag (tidak ada FK)
      * 5. Link        → t_link (FK ke t_kategori)
      * 6. LinkTag     → t_link_tag (FK ke t_link & t_tag)
-     * 7. Laporan     → t_laporan (FK ke t_pengguna)
      *
      * Dibungkus dalam transaction untuk atomicity:
      * jika satu seeder gagal, semua perubahan di-rollback.
@@ -35,7 +33,6 @@ class DatabaseSeeder extends Seeder
                 TagSeeder::class,
                 LinkSeeder::class,
                 LinkTagSeeder::class,
-                LaporanSeeder::class,
             ]);
         });
     }
