@@ -38,5 +38,8 @@ class CheckLinkStatus implements ShouldQueue
 
         $statusData = $checker->check($link);
         $link->update($statusData);
+
+        // Broadcast event agar UI terupdate
+        event(new \App\Events\LinkStatusUpdated($link));
     }
 }

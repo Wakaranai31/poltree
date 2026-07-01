@@ -76,7 +76,7 @@
                         </thead>
                         <tbody>
                             @foreach ($links as $index => $link)
-                                <tr>
+                                <tr id="link-row-{{ $link->id_link }}">
                                     <td class="pl-8">{{ $links->firstItem() + $index }}</td>
                                     <td>
                                         <div class="flex flex-col">
@@ -91,14 +91,14 @@
                                             </a>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td id="status-cell-{{ $link->id_link }}">
                                         @php $statusClass = $link->resolved_status === 'aktif' ? 'status-active' : 'status-inactive'; @endphp
                                         <span class="status-badge {{ $statusClass }}">
                                             <span class="w-1.5 h-1.5 rounded-full {{ $link->resolved_status === 'aktif' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]' }}"></span>
                                             {{ ucfirst($link->resolved_status) }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td id="status-link-cell-{{ $link->id_link }}">
                                         {{-- Status Link (API Check) --}}
                                         @if(!$link->status_checked_at)
                                             <span class="status-badge bg-gray-50 text-gray-400 border border-gray-200/50 flex items-center w-max px-2.5 py-1 rounded-full text-[10px] font-bold">
@@ -132,7 +132,7 @@
                                             @endforelse
                                         </div>
                                     </td>
-                                    <td class="text-[11px] text-gray-500">
+                                    <td id="time-cell-{{ $link->id_link }}" class="text-[11px] text-gray-500">
                                         <div class="flex flex-col">
                                             <span>{{ $link->status_checked_at ? $link->status_checked_at->diffForHumans() : '-' }}</span>
                                             @if($link->status_checked_at)
@@ -142,7 +142,7 @@
                                     </td>
                                     <td class="pr-8">
                                         <div class="action-btns justify-center items-center">
-                                            <button type="button" class="btn-action btn-edit" onclick="editLink({{ json_encode([
+                                            <button type="button" class="btn-action btn-edit" data-link="{{ json_encode([
                                                 'id' => $link->id_link,
                                                 'nama_web' => $link->nama_web,
                                                 'url' => $link->url,
@@ -150,7 +150,7 @@
                                                 'id_kategori' => $link->id_kategori,
                                                 'tag_ids' => $link->tags->pluck('id_tag')->toArray(),
                                                 'status' => $link->status
-                                            ]) }})">
+                                            ]) }}" onclick="editLink(JSON.parse(this.dataset.link))">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                             </button>
                                             <form action="{{ route('admin.links.destroy', $link->id_link) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus layanan &quot;{{ $link->nama_web }}&quot;?')" class="inline">
@@ -169,7 +169,7 @@
                 {{-- Card View --}}
                 <div class="links-grid mb-6">
                     @foreach ($links as $link)
-                        <div class="link-card">
+                        <div class="link-card" id="link-card-{{ $link->id_link }}">
                             <div class="link-card-header">
                                 <div class="link-card-icon-box">
                                     <img src="{{ asset('images/logo-polibatam.png') }}" alt="Logo" style="width: 24px; height: 24px; object-fit: contain;">
@@ -191,7 +191,7 @@
                                 @endif
                             </div>
                             <div class="link-card-footer">
-                                <div class="link-card-status">
+                                <div class="link-card-status" id="card-status-{{ $link->id_link }}">
                                     @php
                                         $isOnline = $link->status_link === 'aktif';
                                         $isBermasalah = $link->status_link === 'bermasalah';
@@ -210,7 +210,7 @@
                                     </span>
                                 </div>
                                 <div class="link-card-actions">
-                                    <button type="button" class="btn-mini-action btn-mini-edit" title="Edit" onclick="editLink({{ json_encode([
+                                    <button type="button" class="btn-mini-action btn-mini-edit" title="Edit" data-link="{{ json_encode([
                                         'id' => $link->id_link,
                                         'nama_web' => $link->nama_web,
                                         'url' => $link->url,
@@ -218,7 +218,7 @@
                                         'id_kategori' => $link->id_kategori,
                                         'tag_ids' => $link->tags->pluck('id_tag')->toArray(),
                                         'status' => $link->status
-                                    ]) }})">
+                                    ]) }}" onclick="editLink(JSON.parse(this.dataset.link))">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </button>
                                     <form action="{{ route('admin.links.destroy', $link->id_link) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus layanan &quot;{{ $link->nama_web }}&quot;?')" class="inline">
@@ -506,5 +506,89 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeViewModeToggle('links');
         });
+    </script>
+    
+    {{-- Script Module Khusus Realtime --}}
+    <script type="module">
+        // Module scripts selalu dijalankan setelah DOM dirender (deferred).
+        // Kita tidak perlu menggunakan DOMContentLoaded lagi di dalam module.
+        const initEcho = () => {
+            if (window.Echo) {
+                window.Echo.channel('links-status')
+                    .listen('LinkStatusUpdated', (e) => {
+                        console.log('Realtime status update received:', e);
+                        if (!e || !e.link) return;
+                        
+                        const linkId = e.link.id_link;
+                        const status = e.link.status_link;
+                        const summary = e.link.status_summary || '';
+                        
+                        // 1. Update Tabel Status Link
+                        const statusCell = document.getElementById('status-link-cell-' + linkId);
+                        if (statusCell) {
+                            let badgeHtml = '';
+                            if (status === 'aktif') {
+                                badgeHtml = `<span class="status-badge bg-emerald-50 text-emerald-700 border border-emerald-100/60 flex items-center w-max px-2.5 py-1 rounded-full text-[10px] font-bold" title="${summary}">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] animate-pulse"></span>
+                                    Online
+                                </span>`;
+                            } else if (status === 'bermasalah') {
+                                badgeHtml = `<span class="status-badge bg-rose-50 text-rose-700 border border-rose-100/60 flex items-center w-max px-2.5 py-1 rounded-full text-[10px] font-bold" title="${summary}">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]"></span>
+                                    Offline
+                                </span>`;
+                            } else {
+                                badgeHtml = `<span class="status-badge bg-gray-50 text-gray-500 border border-gray-200/50 flex items-center w-max px-2.5 py-1 rounded-full text-[10px] font-bold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
+                                    ${status || 'Belum Dicek'}
+                                </span>`;
+                            }
+                            statusCell.innerHTML = badgeHtml;
+                            
+                            // Visual feedback berkedip saat diupdate
+                            statusCell.classList.add('animate-pulse');
+                            setTimeout(() => statusCell.classList.remove('animate-pulse'), 1500);
+                        }
+                        
+                        // 2. Update Waktu Tabel
+                        const timeCell = document.getElementById('time-cell-' + linkId);
+                        if (timeCell) {
+                            timeCell.innerHTML = `
+                                <div class="flex flex-col text-[11px] text-gray-500">
+                                    <span class="text-green-500 font-bold">Baru saja</span>
+                                </div>
+                            `;
+                        }
+
+                        // 3. Update Card View
+                        const cardStatus = document.getElementById('card-status-' + linkId);
+                        if (cardStatus) {
+                            const isOnline = status === 'aktif';
+                            const isBermasalah = status === 'bermasalah';
+                            const dotClass = isOnline ? '' : (isBermasalah ? 'offline' : 'bg-gray-400');
+                            const textClass = isOnline ? 'text-green-600' : (isBermasalah ? 'text-red-600' : 'text-gray-500');
+                            const textStr = isOnline ? 'Online' : (isBermasalah ? 'Offline' : (status || 'Belum Dicek'));
+                            
+                            cardStatus.innerHTML = `
+                                <span class="status-dot ${dotClass}"></span>
+                                <span class="status-text ${textClass}">${textStr}</span>
+                            `;
+                            
+                            // Visual feedback untuk card
+                            cardStatus.classList.add('opacity-50');
+                            setTimeout(() => cardStatus.classList.remove('opacity-50'), 500);
+                        }
+                        
+                        if (window.showToast) {
+                            window.showToast('Status "' + e.link.nama_web + '" baru saja diperbarui menjadi ' + (status==='aktif'?'Online':'Offline'), 'success');
+                        }
+                    });
+            } else {
+                // Retry setiap 100ms hingga Echo termuat dari Vite (app.js)
+                setTimeout(initEcho, 100);
+            }
+        };
+        
+        initEcho();
     </script>
 @endsection
