@@ -8,52 +8,14 @@ use Illuminate\Support\Facades\DB;
 return new class extends Migration
 {
     /**
-     * Advanced database features: audit log table, triggers, stored procedures,
+     * Advanced database features: stored procedures,
      * stored functions, and check constraints.
      */
     public function up(): void
     {
-        // 1. Create Audit Logs Table
-        if (!Schema::hasTable('t_audit_log')) {
-            Schema::create('t_audit_log', function (Blueprint $table) {
-                $table->id();
-                $table->string('table_name', 50);
-                $table->string('action', 20);
-                $table->integer('record_id');
-                $table->text('old_value')->nullable();
-                $table->text('new_value')->nullable();
-                $table->timestamp('created_at')->useCurrent();
-
-                // Indexes untuk query audit
-                $table->index('table_name');
-                $table->index('created_at');
-                $table->index(['table_name', 'record_id']);
-            });
-        }
-
-        // 2. Drop existing triggers/procedures/functions (idempotent)
-        DB::unprepared("DROP TRIGGER IF EXISTS trg_after_link_update");
+        // Drop existing procedures/functions (idempotent)
         DB::unprepared("DROP PROCEDURE IF EXISTS sp_get_dashboard_statistics");
-        DB::unprepared("DROP FUNCTION IF EXISTS sf_get_category_link_count");
 
-        // 3. Create Trigger: AFTER UPDATE on t_link → log to t_audit_log
-        DB::unprepared("
-            CREATE TRIGGER trg_after_link_update
-            AFTER UPDATE ON t_link
-            FOR EACH ROW
-            BEGIN
-                IF OLD.status <> NEW.status OR OLD.url <> NEW.url THEN
-                    INSERT INTO t_audit_log (table_name, action, record_id, old_value, new_value)
-                    VALUES (
-                        't_link',
-                        'UPDATE',
-                        OLD.id_link,
-                        CONCAT('status: ', OLD.status, ', url: ', OLD.url),
-                        CONCAT('status: ', NEW.status, ', url: ', NEW.url)
-                    );
-                END IF;
-            END
-        ");
 
         // 4. Create Stored Procedure: sp_get_dashboard_statistics
         DB::unprepared("
@@ -79,7 +41,8 @@ return new class extends Migration
                 BEGIN
                     DECLARE max_cat_id INT;
                     SELECT id_kategori INTO max_cat_id
-                    FROM t_terdaftar 
+                    FROM t_link 
+                    WHERE id_kategori IS NOT NULL
                     GROUP BY id_kategori 
                     ORDER BY COUNT(id_link) DESC 
                     LIMIT 1;
@@ -96,20 +59,7 @@ return new class extends Migration
             END
         ");
 
-        // 5. Create Stored Function: sf_get_category_link_count
-        DB::unprepared("
-            CREATE FUNCTION sf_get_category_link_count(cat_id INT)
-            RETURNS INT
-            DETERMINISTIC
-            READS SQL DATA
-            BEGIN
-                DECLARE link_count INT;
-                SELECT COUNT(*) INTO link_count
-                FROM t_terdaftar
-                WHERE id_kategori = cat_id;
-                RETURN link_count;
-            END
-        ");
+
 
         // 6. Add CHECK Constraint (MySQL 8.0+)
         try {
@@ -125,14 +75,11 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::unprepared("DROP TRIGGER IF EXISTS trg_after_link_update");
         DB::unprepared("DROP PROCEDURE IF EXISTS sp_get_dashboard_statistics");
-        DB::unprepared("DROP FUNCTION IF EXISTS sf_get_category_link_count");
+
 
         try {
             DB::unprepared("ALTER TABLE t_link DROP CONSTRAINT IF EXISTS chk_link_status");
         } catch (\Throwable $e) {}
-
-        Schema::dropIfExists('t_audit_log');
     }
 };
