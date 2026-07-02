@@ -19,7 +19,7 @@
 
 <body class="min-h-screen overflow-x-hidden bg-slate-100 font-sans text-slate-900 antialiased">
     <main class="relative isolate flex min-h-screen overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ asset('campus.png') }}');"
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ asset('campus.png') }}')" ;
             aria-hidden="true"></div>
         <div class="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,239,221,0.9)_0%,rgba(255,255,255,0.42)_44%,rgba(191,219,254,0.84)_100%)]"
             aria-hidden="true"></div>
@@ -55,12 +55,12 @@
                     </div>
 
                     @if ($errors->any())
-                        <div class="mb-4 rounded-2xl border border-red-200/80 bg-red-50/85 px-4 py-3 text-sm leading-6 text-red-700 shadow-sm"
-                            role="alert">
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
+                    <div class="mb-4 rounded-2xl border border-red-200/80 bg-red-50/85 px-4 py-3 text-sm leading-6 text-red-700 shadow-sm"
+                        role="alert">
+                        @foreach ($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
                     @endif
 
                     <form method="POST" action="{{ route('password.update.post') }}" class="space-y-3" novalidate>
@@ -72,7 +72,7 @@
                             <div class="group relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-orange-500">
                                     <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="currentColor"/>
+                                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="currentColor" />
                                     </svg>
                                 </span>
                                 <input id="password" type="password" name="password" placeholder="Password Baru" required autofocus
@@ -85,7 +85,7 @@
                             <div class="group relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-orange-500">
                                     <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="currentColor"/>
+                                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" fill="currentColor" />
                                     </svg>
                                 </span>
                                 <input id="password_confirmation" type="password" name="password_confirmation" placeholder="Ulangi Password Baru" required
@@ -108,7 +108,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Animate background overlay & blobs
-            gsap.fromTo('.absolute.bg-cover', { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 1.6, ease: 'power2.out' });
+            gsap.fromTo('.absolute.bg-cover', {
+                opacity: 0,
+                scale: 1.1
+            }, {
+                opacity: 1,
+                scale: 1,
+                duration: 1.6,
+                ease: 'power2.out'
+            });
             gsap.from('.pointer-events-none', {
                 opacity: 0,
                 scale: 0.8,
@@ -118,31 +126,55 @@
             });
 
             // Create timeline for smooth stagger
-            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+            const tl = gsap.timeline({
+                defaults: {
+                    ease: 'power3.out'
+                }
+            });
 
             // Animate Welcome Section
-            tl.from('section:nth-child(1) > div', { opacity: 0, y: -25, duration: 0.8 }, '+=0.2')
-              .from('section:nth-child(1) > h1', { opacity: 0, x: -35, duration: 0.8 }, '-=0.6')
-              .from('section:nth-child(1) > p', { opacity: 0, x: -35, duration: 0.8 }, '-=0.6');
+            tl.from('section:nth-child(1) > div', {
+                    opacity: 0,
+                    y: -25,
+                    duration: 0.8
+                }, '+=0.2')
+                .from('section:nth-child(1) > h1', {
+                    opacity: 0,
+                    x: -35,
+                    duration: 0.8
+                }, '-=0.6')
+                .from('section:nth-child(1) > p', {
+                    opacity: 0,
+                    x: -35,
+                    duration: 0.8
+                }, '-=0.6');
 
             // Animate Reset Password Card
-            tl.from('section:nth-child(2)', { 
-                opacity: 0, 
-                y: 50, 
+            tl.from('section:nth-child(2)', {
+                opacity: 0,
+                y: 50,
                 scale: 0.95,
-                duration: 1, 
-                ease: 'back.out(1.2)' 
+                duration: 1,
+                ease: 'back.out(1.2)'
             }, '-=0.8');
 
             // Animate Form Content
-            tl.from('section:nth-child(2) > div', { opacity: 0, y: 15, duration: 0.5 }, '-=0.5')
-              .from('form > .space-y-1.5', { 
-                  opacity: 0, 
-                  y: 15, 
-                  stagger: 0.15, 
-                  duration: 0.5 
-              }, '-=0.3')
-              .from('form > button', { opacity: 0, y: 15, duration: 0.5 }, '-=0.2');
+            tl.from('section:nth-child(2) > div', {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.5
+                }, '-=0.5')
+                .from('form > .space-y-1.5', {
+                    opacity: 0,
+                    y: 15,
+                    stagger: 0.15,
+                    duration: 0.5
+                }, '-=0.3')
+                .from('form > button', {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.5
+                }, '-=0.2');
         });
     </script>
 </body>

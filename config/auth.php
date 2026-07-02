@@ -52,7 +52,7 @@ return [
 
         'pengguna' => [
             'driver' => 'session',
-            'provider' => 'penggunas',
+            'provider' => 'pengguna',
         ],
     ],
 
@@ -84,7 +84,7 @@ return [
             'model' => Admin::class,
         ],
 
-        'penggunas' => [
+        'pengguna' => [
             'driver' => 'eloquent',
             'model' => Pengguna::class,
         ],
@@ -113,6 +113,18 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'pengguna' => [
+            'provider' => 'pengguna',
+            'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],

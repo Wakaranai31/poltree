@@ -8,6 +8,7 @@ use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class LoginController extends Controller
 {
@@ -102,7 +103,6 @@ class LoginController extends Controller
         ]);
 
         $identity = $request->identity;
-        $token    = \Illuminate\Support\Str::random(60);
 
         // ── 1. Cek Admin (t_admin) ─────────────────────────────────────────
         $admin = Admin::where('nik_admin', $identity)
@@ -117,18 +117,11 @@ class LoginController extends Controller
                 ]);
             }
 
-            session([
-                'reset_token' => $token,
-                'reset_nik'   => $admin->nik_admin,
-                'reset_role'  => 'admin'
-            ]);
+            $status = Password::broker('admins')->sendResetLink(['email' => $admin->email]);
 
-            $resetUrl = route('password.reset', $token);
-
-            \Illuminate\Support\Facades\Mail::to($admin->email)
-                ->send(new \App\Mail\ResetPasswordMail($resetUrl, $admin->nama));
-
-            return back()->with('status', 'Tautan reset password telah dikirim ke email Anda.');
+            return $status === Password::RESET_LINK_SENT
+                ? back()->with('status', 'Tautan reset password telah dikirim ke email Anda.')
+                : back()->withErrors(['identity' => 'Gagal mengirim tautan reset. Silakan coba lagi nanti.']);
         }
 
         // ── 2. Cek Pengguna (t_pengguna) ───────────────────────────────────
@@ -144,18 +137,11 @@ class LoginController extends Controller
                 ]);
             }
 
-            session([
-                'reset_token' => $token,
-                'reset_nik'   => $pengguna->nik,
-                'reset_role'  => 'pengguna'
-            ]);
+            $status = Password::broker('pengguna')->sendResetLink(['email' => $pengguna->email]);
 
-            $resetUrl = route('password.reset', $token);
-
-            \Illuminate\Support\Facades\Mail::to($pengguna->email)
-                ->send(new \App\Mail\ResetPasswordMail($resetUrl, $pengguna->nama_user));
-
-            return back()->with('status', 'Tautan reset password telah dikirim ke email Anda.');
+            return $status === Password::RESET_LINK_SENT
+                ? back()->with('status', 'Tautan reset password telah dikirim ke email Anda.')
+                : back()->withErrors(['identity' => 'Gagal mengirim tautan reset. Silakan coba lagi nanti.']);
         }
 
         // ── 3. Tidak ditemukan ─────────────────────────────────────────────
@@ -167,15 +153,9 @@ class LoginController extends Controller
     /**
      * Tampilkan halaman atur ulang password.
      */
-    public function showResetPassword($token)
+    public function showResetPassword(Request $request, $token)
     {
-        if (session('reset_token') !== $token) {
-            return redirect()->route('password.request')->withErrors([
-                'identity' => 'Sesi reset password tidak valid atau telah kedaluwarsa.'
-            ]);
-        }
-
-        return view('auth.reset-password', compact('token'));
+        return view('auth.reset-password', ['token' => $token, 'email' => $request->email]);
     }
 
     /**
@@ -185,36 +165,41 @@ class LoginController extends Controller
     {
         $request->validate([
             'token' => ['required'],
+            'email' => ['required', 'email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ], [
+            'email.required' => 'Alamat email wajib disertakan.',
+            'email.email' => 'Format email tidak valid.',
             'password.required' => 'Password baru wajib diisi.',
             'password.min' => 'Password minimal harus 6 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        if (session('reset_token') !== $request->token) {
-            return redirect()->route('password.request')->withErrors([
-                'identity' => 'Sesi reset password tidak valid.'
-            ]);
+        $resetCallback = function ($user, $password) {
+            $user->password = Hash::make($password);
+            $user->save();
+        };
+
+        // Coba di broker admins
+        $status = Password::broker('admins')->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $resetCallback
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Kata sandi Anda berhasil diperbarui! Silakan masuk.');
         }
 
-        $nik = session('reset_nik');
-        $role = session('reset_role');
-        $newPassword = $request->password;
+        // Jika tidak, coba di broker penggunas
+        $status = Password::broker('pengguna')->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $resetCallback
+        );
 
-        if ($role === 'admin') {
-            Admin::where('nik_admin', $nik)->update([
-                'password' => Hash::make($newPassword)
-            ]);
-        } else {
-            Pengguna::where('nik', $nik)->update([
-                'password' => Hash::make($newPassword)
-            ]);
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Kata sandi Anda berhasil diperbarui! Silakan masuk.');
         }
 
-        // Hapus sesi reset
-        session()->forget(['reset_token', 'reset_nik', 'reset_role']);
-
-        return redirect()->route('login')->with('success', 'Kata sandi Anda berhasil diperbarui! Silakan masuk.');
+        return back()->withErrors(['email' => 'Gagal mereset password. Token tidak valid atau kedaluwarsa.']);
     }
 }
