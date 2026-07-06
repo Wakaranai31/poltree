@@ -347,17 +347,15 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const readCustomCategories = function () {
-        try {
-            return JSON.parse(window.localStorage.getItem(customCategoryStorageKey) || '[]');
-        } catch (error) {
-            return [];
-        }
+        // Disabled LocalStorage category persistence per user request
+        return [];
     };
 
     const writeStoredCategories_placeholder_not_used = null;
 
     const writeCustomCategories = function (items) {
-        window.localStorage.setItem(customCategoryStorageKey, JSON.stringify(items));
+        // Disabled LocalStorage category persistence per user request
+        return;
     };
 
     const readShortcutFilter = function () {
@@ -1161,36 +1159,58 @@ document.addEventListener('DOMContentLoaded', function () {
                 applyShortcutFilter(currentFilter);
             }
         } else {
-            // Standard category save logic
-            const persistedName = persistCustomCategory(newCategoryName);
-            const targetTriggers = [];
-
-            if (categoryBuilderState.source === 'service' && activeTrigger) {
-                targetTriggers.push(activeTrigger);
-            }
-
-            selectedLinkTitles.forEach(function (linkTitle) {
-                const matchedTrigger = findTriggerByTitle(linkTitle);
-                if (matchedTrigger) {
-                    targetTriggers.push(matchedTrigger);
-                }
-            });
-
-            if (targetTriggers.length) {
-                const storedCategories = readStoredCategories();
-                targetTriggers.forEach(function (trigger) {
-                    storedCategories[getServiceKey(trigger)] = persistedName;
+            // Send to backend to persist in database
+            const storeUrl = window.PolTree.storeCategoryRoute || '';
+            const csrfToken = window.PolTree.csrfToken || document.querySelector('meta[name="csrf-token"]')?.content || '';
+            
+            if (storeUrl) {
+                fetch(storeUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nama_kategori: newCategoryName,
+                        icon: iconValue
+                    })
+                })
+                .then(function(response) {
+                    if (!response.ok) {
+                        return response.json().then(function(errData) {
+                            throw new Error(errData.message || 'Gagal menyimpan kategori.');
+                        }).catch(function() {
+                            throw new Error('Gagal memproses respons server.');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data.success) {
+                        if (typeof showToast === 'function') {
+                            showToast(`Kategori "${newCategoryName}" berhasil dibuat!`, 'success');
+                        }
+                        // Reload page to reflect changes from server
+                        window.location.reload();
+                    } else {
+                        if (typeof showToast === 'function') {
+                            showToast(data.message || 'Gagal menyimpan kategori.', 'error');
+                        }
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error saving category to backend:', error);
+                    if (typeof showToast === 'function') {
+                        showToast(error.message || 'Terjadi kesalahan saat menyimpan kategori.', 'error');
+                    }
                 });
-                writeStoredCategories(storedCategories);
             }
 
-            applyShortcutFilter(categoryBuilderState.source === 'shortcut' ? persistedName : readShortcutFilter());
+            closeCategoryBuilder();
+            return;
         }
 
-        writeCustomCategoryIcons(customCategoryIcons);
-
-        syncCustomCategories();
-        syncServiceStates();
         closeCategoryBuilder();
 
         if (typeof showToast === 'function') {

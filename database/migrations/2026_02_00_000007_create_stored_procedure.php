@@ -80,6 +80,7 @@ return new class extends Migration
 
         try {
             DB::unprepared("ALTER TABLE t_link DROP CONSTRAINT IF EXISTS chk_link_status");
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+        }
     }
 };

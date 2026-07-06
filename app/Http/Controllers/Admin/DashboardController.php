@@ -59,10 +59,9 @@ class DashboardController extends Controller
         // 4. Layanan Terpopuler (Top Clicked Links)
         $topLinks = Link::orderBy('hit_point', 'desc')->take(5)->get();
 
-        // ── B. Memanggil Stored Function & Subquery Lanjutan ────────────────
-        // Menggunakan Stored Function 'sf_get_category_link_count' untuk menghitung tautan per kategori
-        $topCategories = Kategori::select('*')
-            ->selectRaw('sf_get_category_link_count(id_kategori) AS links_count')
+        // ── B. Mengambil Top Kategori (Subquery / Agregasi) ─────────────────
+        // Menggunakan Eloquent withCount bawaan Laravel (Lebih efisien & Best Practice)
+        $topCategories = Kategori::withCount('links as links_count')
             ->orderBy('links_count', 'desc')
             ->take(5)
             ->get();
