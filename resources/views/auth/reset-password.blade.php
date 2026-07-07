@@ -68,6 +68,20 @@
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="space-y-1.5">
+                            <label for="email" class="sr-only">Alamat Email</label>
+                            <div class="group relative">
+                                <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-orange-500">
+                                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect>
+                                        <polyline points="3 7 12 13 21 7"></polyline>
+                                    </svg>
+                                </span>
+                                <input id="email" type="email" name="email" value="{{ $email ?? old('email') }}" placeholder="Alamat Email" required
+                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
                             <label for="password" class="sr-only">Password Baru</label>
                             <div class="group relative">
                                 <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-orange-500">
