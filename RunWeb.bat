@@ -14,4 +14,10 @@ start "" %GIT_BASH% -c "echo 'Menjalankan: php artisan queue:work'; php artisan 
 :: Jendela 4: Menjalankan Schedule Worker
 start "" %GIT_BASH% -c "echo 'Menjalankan: php artisan schedule:work'; php artisan schedule:work; exec bash"
 
+:: Menambahkan jeda 4 detik agar server Laravel siap terlebih dahulu
+timeout /t 5 /nobreak >nul
+
+:: Jendela 5: Otomatis membuka browser ke URL poltree.test
+start http://poltree.test
+
 exit
