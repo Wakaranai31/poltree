@@ -26,19 +26,18 @@ class LoginController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => ['required', 'string'],
+            'nik' => ['required', 'string'],
             'password' => ['required', 'string'],
         ], [
-            'username.required' => 'NIK / Username wajib diisi.',
+            'nik.required' => 'NIK wajib diisi.',
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        $nip      = $request->username;
+        $nip      = $request->nik;
         $password = $request->password;
 
         // ── 1. Coba login sebagai Admin (t_admin) ──────────────────────────
         $admin = Admin::where('nik_admin', $nip)
-            ->orWhere('username', $nip)
             ->first();
 
         if ($admin && (Hash::check($password, $admin->password) || $admin->password === $password)) {
@@ -50,8 +49,6 @@ class LoginController extends Controller
 
         // ── 2. Coba login sebagai Pengguna (t_pengguna) ────────────────────
         $pengguna = Pengguna::where('nik', $nip)
-            ->orWhere('username', $nip)
-            ->orWhere('email', $nip)
             ->first();
 
         if ($pengguna && (Hash::check($password, $pengguna->password) || $pengguna->password === $password)) {
@@ -63,9 +60,9 @@ class LoginController extends Controller
 
         // ── 3. Gagal ───────────────────────────────────────────────────────
         return back()
-            ->withInput($request->only('username'))
+            ->withInput($request->only('nik'))
             ->withErrors([
-                'username' => 'NIK / Username atau password salah.',
+                'nik' => 'NIK atau password salah.',
             ]);
     }
 
@@ -97,23 +94,21 @@ class LoginController extends Controller
     public function handleForgotPassword(Request $request)
     {
         $request->validate([
-            'identity' => ['required', 'string'],
+            'nik' => ['required', 'string'],
         ], [
-            'identity.required' => 'NIK atau Email wajib diisi.',
+            'nik.required' => 'NIK wajib diisi.',
         ]);
 
-        $identity = $request->identity;
+        $identity = $request->nik;
 
         // ── 1. Cek Admin (t_admin) ─────────────────────────────────────────
         $admin = Admin::where('nik_admin', $identity)
-            ->orWhere('username', $identity)
-            ->orWhere('email', $identity)
             ->first();
 
         if ($admin) {
             if (empty($admin->email)) {
                 return back()->withErrors([
-                    'identity' => 'Akun ini belum memiliki alamat email. Hubungi administrator.'
+                    'nik' => 'Akun ini belum memiliki alamat email. Hubungi administrator.'
                 ]);
             }
 
@@ -121,19 +116,17 @@ class LoginController extends Controller
 
             return $status === Password::RESET_LINK_SENT
                 ? back()->with('status', 'Tautan reset password telah dikirim ke email Anda.')
-                : back()->withErrors(['identity' => 'Gagal mengirim tautan reset. Silakan coba lagi nanti.']);
+                : back()->withErrors(['nik' => 'Gagal mengirim tautan reset. Silakan coba lagi nanti.']);
         }
 
         // ── 2. Cek Pengguna (t_pengguna) ───────────────────────────────────
         $pengguna = Pengguna::where('nik', $identity)
-            ->orWhere('username', $identity)
-            ->orWhere('email', $identity)
             ->first();
 
         if ($pengguna) {
             if (empty($pengguna->email)) {
                 return back()->withErrors([
-                    'identity' => 'Akun ini belum memiliki alamat email. Hubungi administrator.'
+                    'nik' => 'Akun ini belum memiliki alamat email. Hubungi administrator.'
                 ]);
             }
 
@@ -141,12 +134,12 @@ class LoginController extends Controller
 
             return $status === Password::RESET_LINK_SENT
                 ? back()->with('status', 'Tautan reset password telah dikirim ke email Anda.')
-                : back()->withErrors(['identity' => 'Gagal mengirim tautan reset. Silakan coba lagi nanti.']);
+                : back()->withErrors(['nik' => 'Gagal mengirim tautan reset. Silakan coba lagi nanti.']);
         }
 
         // ── 3. Tidak ditemukan ─────────────────────────────────────────────
         return back()->withErrors([
-            'identity' => 'NIK atau Email tidak terdaftar dalam sistem.'
+            'nik' => 'NIK tidak terdaftar dalam sistem.'
         ]);
     }
 

@@ -19,35 +19,36 @@
 
 <body class="min-h-screen overflow-x-hidden bg-slate-100 font-sans text-slate-900 antialiased">
     <main class="relative isolate flex min-h-screen overflow-hidden">
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ asset('campus.png') }}')" ;
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ asset('campus.png') }}');"
             aria-hidden="true"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(115deg,rgba(255,239,221,0.9)_0%,rgba(255,255,255,0.42)_44%,rgba(191,219,254,0.84)_100%)]"
-            aria-hidden="true"></div>
-        <div class="pointer-events-none absolute -left-24 bottom-[-7rem] h-[22rem] w-[28rem] rounded-[60%_40%_55%_45%/50%_60%_40%_50%] bg-white/55 blur-[2px]"
-            aria-hidden="true"></div>
-        <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-72 rounded-[45%_55%_40%_60%/55%_45%_60%_40%] bg-white/40"
-            aria-hidden="true"></div>
+            
+        <div class="absolute inset-0 bg-gradient-to-r from-[#091057] to-transparent opacity-90" aria-hidden="true"></div>
+        <div class="absolute inset-0 bg-gradient-to-l from-[#ff6900] to-transparent opacity-40" aria-hidden="true"></div>
 
         <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center px-6 py-10 lg:px-10">
             <div class="grid w-full gap-10 justify-items-center lg:justify-items-stretch lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center xl:grid-cols-[minmax(0,1fr)_380px]">
-                <section class="max-w-xl mx-auto lg:mx-0 text-center lg:text-left animate-fade-up [--animation-delay:0.1s]">
-                    <div
-                        class="mb-5 inline-flex items-center gap-3 rounded-full border border-white/70 bg-white/55 px-4 py-2 text-sm font-semibold text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                        <span class="h-2.5 w-2.5 rounded-full bg-orange-500"></span>
-                        Kata Sandi Baru
+                <section class="max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
+                    <div class="inline-flex flex-col items-stretch gap-4">
+
+                        <!-- Bungkus Pertama: Kotak Badge (Logo & H1) -->
+                        <div class="flex items-center justify-center gap-4 rounded-[28px] border border-slate/70 bg-[#f9f6ed] px-6 py-4">
+                            <img src="{{ asset('LogoPoltree_512_512.png') }}" alt="Logo" class="h-24 w-auto object-contain">
+                            <h1 class="text-4xl font-extrabold leading-tight tracking-tight text-[#091057] sm:text-5xl">
+                                POLTREE
+                            </h1>
+                        </div>
+
+                        <!-- Bungkus Kedua: Teks Penjelasan -->
+                        <div class="flex items-center justify-center rounded-[14px] border border-slate/70 bg-[#f9f6ed] px-6 py-4">
+                            <p class="max-w-md text-center text-sm leading-6 text-[#091057] sm:text-lg font-semibold">
+                                Atur Ulang Sandi.<br>Buat kata sandi baru Anda.
+                            </p>
+                        </div>
                     </div>
-
-                    <h1 class="max-w-lg text-4xl font-extrabold leading-tight tracking-tight text-[#091057] sm:text-5xl">
-                        Atur Ulang Sandi
-                    </h1>
-
-                    <p class="mt-4 max-w-md text-lg leading-8 text-slate-700 sm:text-xl">
-                        Silakan buat kata sandi baru yang aman dan mudah Anda ingat.
-                    </p>
                 </section>
 
                 <section
-                    class="w-full max-w-sm mx-auto lg:mx-0 animate-fade-in rounded-[28px] border border-white/75 bg-white/28 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.14)] backdrop-blur-xl [--animation-delay:0.25s] sm:p-6"
+                    class="w-full max-w-sm mx-auto lg:mx-0 animate-fade-in rounded-[28px] border border-slate/75 bg-[#f9f6ed] p-5 [--animation-delay:0.25s] sm:p-6"
                     aria-label="Form Reset Password">
                     <div class="mb-5 text-center lg:text-left">
                         <h2 class="text-xl font-bold text-[#091057]">Kata Sandi Baru</h2>
@@ -77,7 +78,7 @@
                                     </svg>
                                 </span>
                                 <input id="email" type="email" name="email" value="{{ $email ?? old('email') }}" placeholder="Alamat Email" required
-                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
+                                    class="h-12 w-full rounded-2xl border border-orange bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
                             </div>
                         </div>
 
@@ -90,7 +91,7 @@
                                     </svg>
                                 </span>
                                 <input id="password" type="password" name="password" placeholder="Password Baru" required autofocus
-                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
+                                    class="h-12 w-full rounded-2xl border border-orange bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
                             </div>
                         </div>
 
@@ -103,7 +104,7 @@
                                     </svg>
                                 </span>
                                 <input id="password_confirmation" type="password" name="password_confirmation" placeholder="Ulangi Password Baru" required
-                                    class="h-12 w-full rounded-2xl border border-white/80 bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
+                                    class="h-12 w-full rounded-2xl border border-orange bg-white/85 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] transition duration-200 placeholder:text-slate-400 focus:border-[#091057] focus:bg-white focus:ring-4 focus:ring-[#091057]/10">
                             </div>
                         </div>
 
@@ -114,6 +115,11 @@
                     </form>
                 </section>
             </div>
+        </div>
+        
+        {{-- Footer --}}
+        <div class="absolute bottom-0 left-0 w-full z-20">
+            @include('components.shared.footer')
         </div>
     </main>
 
