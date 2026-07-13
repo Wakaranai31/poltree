@@ -82,10 +82,10 @@
                                                 @if($user->foto)
                                                     <img src="{{ asset($user->foto) }}" class="w-full h-full object-cover">
                                                 @else
-                                                    {{ strtoupper(substr($user->nama_user, 0, 1)) }}
+                                                    {{ strtoupper(substr($user->nama_pengguna, 0, 1)) }}
                                                 @endif
                                             </div>
-                                            <span class="font-bold text-[14px] text-[#080d5f]">{{ $user->nama_user }}</span>
+                                            <span class="font-bold text-[14px] text-[#080d5f]">{{ $user->nama_pengguna }}</span>
                                         </div>
                                     </td>
                                     <td class="text-gray-500 text-[13px]">{{ $user->email }}</td>
@@ -101,13 +101,13 @@
                                     <td class="pr-8">
                                         <div class="action-btns justify-center items-center">
                                             <button type="button" class="btn-action btn-edit shadow-sm" title="Edit"
-                                                onclick="openEditModal('{{ $user->nik }}', '{{ $user->nama_user }}', '{{ $user->email }}', '{{ $user->jabatan }}')">
+                                                onclick="openEditModal('{{ $user->nik }}', '{{ $user->nama_pengguna }}', '{{ $user->email }}', '{{ $user->jabatan }}')">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                                 </svg>
                                             </button>
-                                            <form action="{{ route('admin.users.destroy', $user->nik) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus pengguna &quot;{{ $user->nama_user }}&quot;?')" class="inline">
+                                            <form action="{{ route('admin.users.destroy', $user->nik) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus pengguna &quot;{{ $user->nama_pengguna }}&quot;?')" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn-action btn-delete shadow-sm" title="Hapus">
@@ -133,15 +133,15 @@
                             <div class="user-card-header">
                                 <div class="user-card-avatar-wrap">
                                     @if($user->foto)
-                                        <img src="{{ asset($user->foto) }}" alt="{{ $user->nama_user }}" class="user-card-avatar">
+                                        <img src="{{ asset($user->foto) }}" alt="{{ $user->nama_pengguna }}" class="user-card-avatar">
                                     @else
                                         <div class="user-card-avatar-placeholder">
-                                            {{ strtoupper(substr($user->nama_user, 0, 1)) }}
+                                            {{ strtoupper(substr($user->nama_pengguna, 0, 1)) }}
                                         </div>
                                     @endif
                                 </div>
                                 <div class="user-card-meta">
-                                    <h3 class="user-card-name" title="{{ $user->nama_user }}">{{ $user->nama_user }}</h3>
+                                    <h3 class="user-card-name" title="{{ $user->nama_pengguna }}">{{ $user->nama_pengguna }}</h3>
                                     <span class="user-card-nik">{{ $user->nik }}</span>
                                 </div>
                             </div>
@@ -162,13 +162,13 @@
                             </div>
                             <div class="user-card-actions">
                                 <button type="button" class="btn-mini-action btn-mini-edit" title="Edit"
-                                    onclick="openEditModal('{{ $user->nik }}', '{{ $user->nama_user }}', '{{ $user->email }}', '{{ $user->jabatan }}')">
+                                    onclick="openEditModal('{{ $user->nik }}', '{{ $user->nama_pengguna }}', '{{ $user->email }}', '{{ $user->jabatan }}')">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                     </svg>
                                 </button>
-                                <form action="{{ route('admin.users.destroy', $user->nik) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus pengguna &quot;{{ $user->nama_user }}&quot;?')" class="inline">
+                                <form action="{{ route('admin.users.destroy', $user->nik) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus pengguna &quot;{{ $user->nama_pengguna }}&quot;?')" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-mini-action btn-mini-delete" title="Hapus">
@@ -185,7 +185,7 @@
             </div>
         </div>
         <div class="mb-12">
-            {{ $users->links('partials.pagination') }}
+            {{ $users->links('components.shared.pagination') }}
         </div>
     @else
         <div class="table-card p-12 text-center opacity-50 mt-10">
@@ -219,7 +219,7 @@
 
                     <div class="premium-modal-form-group">
                         <label class="premium-modal-label">Nama</label>
-                        <input type="text" name="nama_user" required class="premium-modal-input" placeholder="Masukkan nama lengkap">
+                        <input type="text" name="nama_pengguna" required class="premium-modal-input" placeholder="Masukkan nama lengkap">
                     </div>
 
                     <div class="premium-modal-form-group">
@@ -275,7 +275,7 @@
 
                     <div class="premium-modal-form-group">
                         <label class="premium-modal-label">Nama</label>
-                        <input type="text" name="nama_user" id="edit_nama" required class="premium-modal-input">
+                        <input type="text" name="nama_pengguna" id="edit_nama" required class="premium-modal-input">
                     </div>
 
                     <div class="premium-modal-form-group">

@@ -170,7 +170,7 @@
             </div>
         </div>
         <div class="mb-12">
-            {{ $tags->links('partials.pagination') }}
+            {{ $tags->links('components.shared.pagination') }}
         </div>
     @else
         <div class="empty-state py-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 rounded-3xl opacity-60 mt-10">

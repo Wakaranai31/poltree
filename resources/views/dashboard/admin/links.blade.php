@@ -66,7 +66,7 @@
                             <tr>
                                 <th class="w-16 pl-8">No</th>
                                 <th>Layanan</th>
-                                <th>Status</th>
+                                <th>Visibilitas</th>
                                 <th>Status Link</th>
                                 <th>Kategori</th>
                                 <th>Tag</th>
@@ -92,10 +92,10 @@
                                         </div>
                                     </td>
                                     <td id="status-cell-{{ $link->id_link }}">
-                                        @php $statusClass = $link->resolved_status === 'aktif' ? 'status-active' : 'status-inactive'; @endphp
+                                        @php $statusClass = $link->resolved_visibilitas === 'ditampilkan' ? 'status-active' : 'status-inactive'; @endphp
                                         <span class="status-badge {{ $statusClass }}">
-                                            <span class="w-1.5 h-1.5 rounded-full {{ $link->resolved_status === 'aktif' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]' }}"></span>
-                                            {{ ucfirst($link->resolved_status) }}
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $link->resolved_visibilitas === 'ditampilkan' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]' }}"></span>
+                                            {{ ucfirst($link->resolved_visibilitas) }}
                                         </span>
                                     </td>
                                     <td id="status-link-cell-{{ $link->id_link }}">
@@ -149,7 +149,7 @@
                                                 'deskripsi' => $link->deskripsi,
                                                 'id_kategori' => $link->id_kategori,
                                                 'tag_ids' => $link->tags->pluck('id_tag')->toArray(),
-                                                'status' => $link->status
+                                                'visibilitas' => $link->visibilitas
                                             ]) }}" onclick="editLink(JSON.parse(this.dataset.link))">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                             </button>
@@ -217,7 +217,7 @@
                                         'deskripsi' => $link->deskripsi,
                                         'id_kategori' => $link->id_kategori,
                                         'tag_ids' => $link->tags->pluck('id_tag')->toArray(),
-                                        'status' => $link->status
+                                        'visibilitas' => $link->visibilitas
                                     ]) }}" onclick="editLink(JSON.parse(this.dataset.link))">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                     </button>
@@ -233,7 +233,7 @@
             </div>
         </div>
         <div class="mb-12">
-            {{ $links->links('partials.pagination') }}
+            {{ $links->links('components.shared.pagination') }}
         </div>
     @else
         <div class="table-card p-12 text-center opacity-50 mt-8">Tidak ada layanan ditemukan.</div>
@@ -303,11 +303,10 @@
                         </div>
 
                         <div class="premium-modal-form-group">
-                            <label class="premium-modal-label">Status Layanan</label>
-                            <select name="status" id="status" class="premium-modal-input appearance-none cursor-pointer">
-                                <option value="aktif">Aktif</option>
-                                <option value="tidak aktif">Tidak Aktif</option>
-                                <option value="bermasalah">Bermasalah</option>
+                            <label class="premium-modal-label">Visibilitas Layanan</label>
+                            <select name="visibilitas" id="visibilitas" class="premium-modal-input appearance-none cursor-pointer">
+                                <option value="ditampilkan">Ditampilkan</option>
+                                <option value="disembunyikan">Disembunyikan</option>
                             </select>
                         </div>
 
@@ -346,13 +345,13 @@
             document.getElementById('url').value = '';
             document.getElementById('deskripsi').value = '';
             document.getElementById('id_kategori').value = '';
-            document.getElementById('status').value = 'aktif';
+            document.getElementById('visibilitas').value = 'ditampilkan';
             
             if (typeof document.getElementById('id_kategori').refreshPremiumSelect === 'function') {
                 document.getElementById('id_kategori').refreshPremiumSelect();
             }
-            if (typeof document.getElementById('status').refreshPremiumSelect === 'function') {
-                document.getElementById('status').refreshPremiumSelect();
+            if (typeof document.getElementById('visibilitas').refreshPremiumSelect === 'function') {
+                document.getElementById('visibilitas').refreshPremiumSelect();
             }
             
             // Reset quick category form
@@ -379,13 +378,13 @@
             document.getElementById('url').value = data.url || '';
             document.getElementById('deskripsi').value = data.deskripsi || '';
             document.getElementById('id_kategori').value = data.id_kategori || '';
-            document.getElementById('status').value = data.status || 'aktif';
+            document.getElementById('visibilitas').value = data.visibilitas || 'ditampilkan';
             
             if (typeof document.getElementById('id_kategori').refreshPremiumSelect === 'function') {
                 document.getElementById('id_kategori').refreshPremiumSelect();
             }
-            if (typeof document.getElementById('status').refreshPremiumSelect === 'function') {
-                document.getElementById('status').refreshPremiumSelect();
+            if (typeof document.getElementById('visibilitas').refreshPremiumSelect === 'function') {
+                document.getElementById('visibilitas').refreshPremiumSelect();
             }
             
             // Reset quick category form

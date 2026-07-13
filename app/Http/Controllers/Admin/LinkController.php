@@ -53,7 +53,7 @@ class LinkController extends Controller
             'role' => 'nullable|string',
             'tag_ids' => 'nullable|array',
             'tag_ids.*' => 'exists:t_tag,id_tag',
-            'status' => 'nullable|string',
+            'visibilitas' => 'nullable|string|in:ditampilkan,disembunyikan',
         ]);
 
         $link = Link::create([
@@ -62,7 +62,7 @@ class LinkController extends Controller
             'deskripsi' => $request->deskripsi,
             'id_kategori' => $request->id_kategori,
             'role' => $request->role,
-            'status' => $request->status ?: 'aktif',
+            'visibilitas' => $request->visibilitas ?: 'ditampilkan',
         ]);
 
         if ($request->has('tag_ids')) {
@@ -88,7 +88,7 @@ class LinkController extends Controller
             'role' => 'nullable|string',
             'tag_ids' => 'nullable|array',
             'tag_ids.*' => 'exists:t_tag,id_tag',
-            'status' => 'nullable|string',
+            'visibilitas' => 'nullable|string|in:ditampilkan,disembunyikan',
         ]);
 
         $link = Link::findOrFail($id);
@@ -98,7 +98,7 @@ class LinkController extends Controller
             'deskripsi' => $request->deskripsi,
             'id_kategori' => $request->id_kategori,
             'role' => $request->role,
-            'status' => $request->status,
+            'visibilitas' => $request->visibilitas,
         ]);
 
         if ($request->has('tag_ids')) {
@@ -134,7 +134,7 @@ class LinkController extends Controller
             ['label' => 'Kelola Layanan', 'href' => route('admin.links'), 'icon' => 'chain', 'active' => $active === 'links'],
             ['label' => 'Kelola Kategori', 'href' => route('admin.categories'), 'icon' => 'folder', 'active' => $active === 'categories'],
             ['label' => 'Kelola Tag', 'href' => route('admin.tags'), 'icon' => 'tag', 'active' => $active === 'tags'],
-            ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
+            // ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
         ];
     }
 }

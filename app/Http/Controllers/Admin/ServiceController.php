@@ -17,7 +17,7 @@ class ServiceController extends Controller
 
         $services = Link::query()
             ->with('kategori')
-            ->whereIn('status', ['aktif', 'bermasalah'])
+            ->where('visibilitas', 'ditampilkan')
             ->when($search !== '', function ($items) use ($search) {
                 $items->where(function ($query) use ($search) {
                     $keyword = '%' . $search . '%';
@@ -28,7 +28,7 @@ class ServiceController extends Controller
                         ->orWhereHas('kategori', function ($kategori) use ($keyword) {
                             $kategori->where('nama_kategori', 'like', $keyword);
                         })
-                        ->orWhere('status', 'like', $keyword);
+                        ->orWhere('visibilitas', 'like', $keyword);
                 });
             })
             ->when($selectedCategory !== '', function ($items) use ($selectedCategory) {
@@ -40,7 +40,7 @@ class ServiceController extends Controller
             ->orderBy('nama_web')
             ->get()
             ->map(function (Link $link) {
-                $resolvedStatus = $link->resolved_status;
+                $resolvedVisibilitas = $link->resolved_visibilitas;
                 $category = $link->kategori?->nama_kategori ?: '';
 
                 return [
@@ -48,7 +48,7 @@ class ServiceController extends Controller
                     'url' => $link->normalized_url ?: '#',
                     'description' => $link->deskripsi ?: 'Website Politeknik Negeri Batam (polibatam.ac.id) adalah website resmi kampus yang berfungsi sebagai pusat informasi dan layanan digital untuk mahasiswa, calon mahasiswa, dosen, dan masyarakat umum.',
                     'category' => $category,
-                    'status' => $resolvedStatus,
+                    'visibilitas' => $resolvedVisibilitas,
                     'status_link' => $link->status_link ?: 'belum dicek',
                     'is_online' => $link->status_link !== 'bermasalah',
                 ];
@@ -87,7 +87,7 @@ class ServiceController extends Controller
             ['label' => 'Kelola Layanan', 'href' => route('admin.links'), 'icon' => 'chain', 'active' => $active === 'links'],
             ['label' => 'Kelola Kategori', 'href' => route('admin.categories'), 'icon' => 'folder', 'active' => $active === 'categories'],
             ['label' => 'Kelola Tag', 'href' => route('admin.tags'), 'icon' => 'tag', 'active' => $active === 'tags'],
-            ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
+            // ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
         ];
     }
 }

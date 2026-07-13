@@ -200,7 +200,7 @@
             </div>
         </div>
         <div class="mb-12">
-            {{ $categories->links('partials.pagination') }}
+            {{ $categories->links('components.shared.pagination') }}
         </div>
     @else
         <div class="table-card p-12 text-center opacity-50 mt-10">

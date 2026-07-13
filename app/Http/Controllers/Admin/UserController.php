@@ -21,11 +21,11 @@ class UserController extends Controller
             ->when($search !== '', function ($query) use ($search) {
                 $keyword = '%' . $search . '%';
                 $query->where('nik', 'like', $keyword)
-                    ->orWhere('nama_user', 'like', $keyword)
+                    ->orWhere('nama_pengguna', 'like', $keyword)
                     ->orWhere('email', 'like', $keyword)
                     ->orWhere('jabatan', 'like', $keyword);
             })
-            ->orderBy('nama_user')
+            ->orderBy('nama_pengguna')
             ->paginate(10)
             ->withQueryString();
 
@@ -40,7 +40,7 @@ class UserController extends Controller
     {
         $request->validate([
             'nik' => 'required|string|unique:t_pengguna,nik',
-            'nama_user' => 'required|string|max:255',
+            'nama_pengguna' => 'required|string|max:255',
             'email' => 'required|email|unique:t_pengguna,email',
             'jabatan' => 'required|string',
             'password' => 'required|string|min:6',
@@ -48,7 +48,7 @@ class UserController extends Controller
 
         Pengguna::create([
             'nik' => $request->nik,
-            'nama_user' => $request->nama_user,
+            'nama_pengguna' => $request->nama_pengguna,
             'email' => $request->email,
             'jabatan' => $request->jabatan,
             'password' => Hash::make($request->password),
@@ -64,17 +64,17 @@ class UserController extends Controller
         ]);
 
         $file = $request->file('excel_file');
-        
+
         try {
             $spreadsheet = IOFactory::load($file->getRealPath());
             $worksheet = $spreadsheet->getActiveSheet();
             $rows = $worksheet->toArray();
-            
+
             if (count($rows) <= 1) {
                 return back()->with('error', 'File Excel kosong atau hanya berisi header.');
             }
 
-            $headers = array_map(function($val) {
+            $headers = array_map(function ($val) {
                 return strtolower(trim((string)$val));
             }, $rows[0]);
 
@@ -84,7 +84,7 @@ class UserController extends Controller
                 $namaIndex = array_search('nama lengkap', $headers);
             }
             if ($namaIndex === false) {
-                $namaIndex = array_search('nama_user', $headers);
+                $namaIndex = array_search('nama_pengguna', $headers);
             }
             $emailIndex = array_search('email', $headers);
             if ($emailIndex === false) {
@@ -110,7 +110,7 @@ class UserController extends Controller
             for ($i = 1; $i < count($rows); $i++) {
                 $row = $rows[$i];
                 if (empty(array_filter($row))) {
-                    continue; 
+                    continue;
                 }
 
                 $nik = trim((string)($row[$nikIndex] ?? ''));
@@ -138,7 +138,7 @@ class UserController extends Controller
 
                 Pengguna::create([
                     'nik' => (int) $nik,
-                    'nama_user' => $nama,
+                    'nama_pengguna' => $nama,
                     'email' => $email,
                     'jabatan' => $jabatan,
                     'password' => Hash::make($password),
@@ -152,7 +152,6 @@ class UserController extends Controller
             }
 
             return back()->with('success', "Seluruh data ({$successCount} pengguna) berhasil diimpor.");
-
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal memproses file Excel: ' . $e->getMessage());
         }
@@ -162,27 +161,27 @@ class UserController extends Controller
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        
+
         // Set Headers
         $sheet->setCellValue('A1', 'NIK');
         $sheet->setCellValue('B1', 'Nama Lengkap');
         $sheet->setCellValue('C1', 'Alamat Email');
         $sheet->setCellValue('D1', 'Role');
         $sheet->setCellValue('E1', 'Password');
-        
+
         // Add Example Row 1
         $sheet->setCellValue('A2', '123456');
         $sheet->setCellValue('B2', 'Ahmad Thohari');
         $sheet->setCellValue('C2', 'ahmad@polibatam.ac.id');
         $sheet->setCellValue('D2', 'Dosen');
         $sheet->setCellValue('E2', 'poltree123');
-        
+
         // Add Example Row 2
         $sheet->setCellValue('A3', '654321');
         $sheet->setCellValue('B3', 'Dede Nurdiansyah');
         $sheet->setCellValue('C3', 'dede@polibatam.ac.id');
         $sheet->setCellValue('D3', 'Tata Usaha');
-        $sheet->setCellValue('E3', ''); 
+        $sheet->setCellValue('E3', '');
 
         // Set column widths automatically
         foreach (range('A', 'E') as $col) {
@@ -190,11 +189,11 @@ class UserController extends Controller
         }
 
         $fileName = 'template_impor_pengguna.xlsx';
-        
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $fileName . '"');
         header('Cache-Control: max-age=0');
-        
+
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit;
@@ -203,7 +202,7 @@ class UserController extends Controller
     public function updateUser(Request $request, $nik)
     {
         $request->validate([
-            'nama_user' => 'required|string|max:255',
+            'nama_pengguna' => 'required|string|max:255',
             'email' => 'required|email|unique:t_pengguna,email,' . $nik . ',nik',
             'jabatan' => 'required|string',
             'password' => 'nullable|string|min:6',
@@ -211,7 +210,7 @@ class UserController extends Controller
 
         $user = Pengguna::findOrFail($nik);
         $data = [
-            'nama_user' => $request->nama_user,
+            'nama_pengguna' => $request->nama_pengguna,
             'email' => $request->email,
             'jabatan' => $request->jabatan,
         ];
@@ -242,7 +241,7 @@ class UserController extends Controller
             ['label' => 'Kelola Layanan', 'href' => route('admin.links'), 'icon' => 'chain', 'active' => $active === 'links'],
             ['label' => 'Kelola Kategori', 'href' => route('admin.categories'), 'icon' => 'folder', 'active' => $active === 'categories'],
             ['label' => 'Kelola Tag', 'href' => route('admin.tags'), 'icon' => 'tag', 'active' => $active === 'tags'],
-            ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
+            // ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
         ];
     }
 }

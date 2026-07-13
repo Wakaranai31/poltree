@@ -29,7 +29,7 @@ class DashboardController extends Controller
             ],
             [
                 'label' => 'Jumlah Layanan',
-                'value' => $this->formatAdminStat(Link::whereIn('status', ['aktif', 'bermasalah'])->count()),
+                'value' => $this->formatAdminStat(Link::where('visibilitas', 'ditampilkan')->count()),
                 'icon' => 'link',
             ],
             [
@@ -41,20 +41,20 @@ class DashboardController extends Controller
 
         // Statistik Tambahan Lengkap
         $totalPengguna = Pengguna::count();
-        $totalLayanan = Link::whereIn('status', ['aktif', 'bermasalah'])->count();
+        $totalLayanan = Link::where('visibilitas', 'ditampilkan')->count();
         $totalKategori = Kategori::count();
 
         // 1. Publik vs Pribadi (Aktif & Bermasalah)
-        $layananPublik = Link::whereIn('status', ['aktif', 'bermasalah'])->whereNull('nik')->count();
-        $layananPribadi = Link::whereIn('status', ['aktif', 'bermasalah'])->whereNotNull('nik')->count();
+        $layananPublik = Link::where('visibilitas', 'ditampilkan')->whereNull('nik')->count();
+        $layananPribadi = Link::where('visibilitas', 'ditampilkan')->whereNotNull('nik')->count();
 
         // 2. Health Status Check (Aktif & Bermasalah)
-        $layananAman = Link::whereIn('status', ['aktif', 'bermasalah'])->where('status_link', 'aktif')->count();
-        $layananDowntime = Link::whereIn('status', ['aktif', 'bermasalah'])->where('status_link', 'bermasalah')->count();
-        $layananBelumDicek = Link::whereIn('status', ['aktif', 'bermasalah'])->where('status_link', 'belum dicek')->count();
+        $layananAman = Link::where('visibilitas', 'ditampilkan')->where('status_link', 'aktif')->count();
+        $layananDowntime = Link::where('visibilitas', 'ditampilkan')->where('status_link', 'bermasalah')->count();
+        $layananBelumDicek = Link::where('visibilitas', 'ditampilkan')->where('status_link', 'belum dicek')->count();
 
         // 3. Waktu Respon Rata-rata (Aktif & Bermasalah, dan memiliki data waktu respon)
-        $avgResponseTime = (int) Link::whereIn('status', ['aktif', 'bermasalah'])->whereNotNull('status_response_time_ms')->avg('status_response_time_ms');
+        $avgResponseTime = (int) Link::where('visibilitas', 'ditampilkan')->whereNotNull('status_response_time_ms')->avg('status_response_time_ms');
 
         // 4. Layanan Terpopuler (Top Clicked Links)
         $topLinks = Link::orderBy('hit_point', 'desc')->take(5)->get();
@@ -67,10 +67,17 @@ class DashboardController extends Controller
             ->get();
 
         $statsDetail = compact(
-            'totalPengguna', 'totalLayanan', 'totalKategori',
-            'layananPublik', 'layananPribadi',
-            'layananAman', 'layananDowntime', 'layananBelumDicek',
-            'avgResponseTime', 'topLinks', 'topCategories'
+            'totalPengguna',
+            'totalLayanan',
+            'totalKategori',
+            'layananPublik',
+            'layananPribadi',
+            'layananAman',
+            'layananDowntime',
+            'layananBelumDicek',
+            'avgResponseTime',
+            'topLinks',
+            'topCategories'
         );
 
         // Tambahkan informasi kategori teraktif dari Stored Procedure ke statsDetail
@@ -108,12 +115,12 @@ class DashboardController extends Controller
         $admin = auth('admin')->user();
 
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama_admin' => 'required|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $data = [
-            'nama' => $request->nama,
+            'nama_admin' => $request->nama_admin,
         ];
 
         if ($request->hasFile('foto')) {
@@ -125,7 +132,7 @@ class DashboardController extends Controller
             $file = $request->file('foto');
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/profile_photos'), $filename);
-            
+
             $data['foto'] = 'uploads/profile_photos/' . $filename;
         }
 
@@ -180,7 +187,7 @@ class DashboardController extends Controller
             ['label' => 'Kelola Layanan', 'href' => route('admin.links'), 'icon' => 'chain', 'active' => $active === 'links'],
             ['label' => 'Kelola Kategori', 'href' => route('admin.categories'), 'icon' => 'folder', 'active' => $active === 'categories'],
             ['label' => 'Kelola Tag', 'href' => route('admin.tags'), 'icon' => 'tag', 'active' => $active === 'tags'],
-            ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
+            // ['label' => 'Uji Test API', 'href' => route('admin.api-checker'), 'icon' => 'pulse', 'active' => $active === 'api-checker'],
         ];
     }
 }
