@@ -65,9 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let activeTrigger = null;
 
-    // Track if we are in saved fallback mode (showing all services because 0 bookmarks exist initially)
+    // Initialize active tracking for bookmarks
     const initialBookmarks = JSON.parse(localStorage.getItem(bookmarkStorageKey) || '[]');
-    let isSavedFallbackMode = (initialBookmarks.length === 0);
 
     // ── Mobile Sidebar Toggle ────────────────────────────────
     const sidebar = document.querySelector('[data-sidebar]');
@@ -119,11 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update sidebar links active class in sync with the current tab
         const sidebarLinks = document.querySelectorAll('.sidebar-link');
         sidebarLinks.forEach(link => {
-            if (link.getAttribute('href')) { // "Beranda" link
+            if (link.hasAttribute('data-sidebar-beranda')) { // "Beranda" / "Tersimpan" link
                 link.classList.toggle('active', tab === 'tersimpan');
-            } else if (link.hasAttribute('data-all-services-btn')) { // "Semua Layanan" button
+            } else if (link.hasAttribute('data-all-services-btn')) { // "Semua Layanan" link
                 link.classList.toggle('active', tab === 'semua');
-            } else if (link.hasAttribute('data-sidebar-kategori')) { // "Kategori" button
+            } else if (link.hasAttribute('data-sidebar-kategori')) { // "Kategori" link
                 link.classList.toggle('active', tab === 'kategori');
             }
         });
@@ -382,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentFilter = readShortcutFilter();
         const tSaved = document.querySelector('[data-shortcut-saved-toggle]');
         const storedBookmarks = JSON.parse(localStorage.getItem(bookmarkStorageKey) || '[]');
-        const isFilteringSaved = (tSaved ? tSaved.classList.contains('active') : false) && !currentFilter && !isSavedFallbackMode && storedBookmarks.length > 0;
+        const isFilteringSaved = (tSaved ? tSaved.classList.contains('active') : false) && !currentFilter;
         const activeRole = window.PolTree.activeRole;
 
         const storedRoles = JSON.parse(localStorage.getItem(roleStorageKey) || '{}');
@@ -1646,9 +1645,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const berandaSidebarLink = document.querySelector('[data-sidebar-beranda]');
     if (berandaSidebarLink) {
         berandaSidebarLink.addEventListener('click', function () {
-            const currentBookmarks = JSON.parse(localStorage.getItem(bookmarkStorageKey) || '[]');
-            const resetTab = currentBookmarks.length === 0 ? 'semua' : 'tersimpan';
-            localStorage.setItem(activeTabStorageKey, resetTab);
+            localStorage.setItem(activeTabStorageKey, 'tersimpan');
         });
     }
 

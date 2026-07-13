@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
         $services = Link::query()
             ->with('kategori')
-            ->whereIn('status', ['aktif', 'bermasalah'])
+            ->where('visibilitas', 'ditampilkan')
             ->where(function ($q) use ($userNik) {
                 $q->whereNull('nik')->orWhere('nik', $userNik);
             })
@@ -62,7 +62,7 @@ class DashboardController extends Controller
                         ->orWhereHas('tags', function ($tags) use ($keyword) {
                             $tags->where('nama_tag', 'like', $keyword);
                         })
-                        ->orWhere('status', 'like', $keyword);
+                        ->orWhere('visibilitas', 'like', $keyword);
                 });
             })
             ->with(['kategori', 'tags'])
@@ -70,14 +70,14 @@ class DashboardController extends Controller
             ->orderBy('nama_web')
             ->get()
             ->map(function (Link $link) {
-                $resolvedStatus = $link->resolved_status;
+                $resolvedVisibilitas = $link->resolved_visibilitas;
 
                 return [
                     'title' => $link->nama_web,
                     'url' => $link->normalized_url ?: '#',
                     'description' => $link->deskripsi ?: 'Layanan website Politeknik Negeri Batam yang tersedia di portal POLTREE.',
                     'category' => $link->kategori?->nama_kategori ?: '',
-                    'status' => $resolvedStatus,
+                    'visibilitas' => $resolvedVisibilitas,
                     'status_link' => $link->status_link ?: 'belum dicek',
                     'is_online' => $link->status_link !== 'bermasalah',
                     'is_custom' => $link->nik !== null,
@@ -106,7 +106,7 @@ class DashboardController extends Controller
         }
 
         $categoriesList = Kategori::query()
-            ->with(['links' => function($q) use ($userNik) {
+            ->with(['links' => function ($q) use ($userNik) {
                 $q->where(function ($query) use ($userNik) {
                     $query->whereNull('nik')->orWhere('nik', $userNik);
                 });
@@ -139,7 +139,31 @@ class DashboardController extends Controller
 
         $allAdminTags = Tag::orderBy('nama_tag')->get();
 
-        return view('dashboard.pengguna.index', compact('services', 'adminServices', 'userServices', 'roles', 'activeRole', 'search', 'heroImages', 'categories', 'allLinkTitles', 'categoriesList', 'allAdminTags'));
+        $menuItems = [
+            [
+                'label' => 'Semua Layanan',
+                'href' => '#',
+                'icon' => '<circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />',
+                'active' => false,
+                'attributes' => 'data-all-services-btn'
+            ],
+            [
+                'label' => 'Halaman Saya',
+                'href' => route('pengguna.dashboard'),
+                'icon' => '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" /><polyline points="9 22 9 12 15 12 15 22" />',
+                'active' => request()->routeIs('pengguna.dashboard'),
+                'attributes' => 'data-sidebar-beranda'
+            ],
+            [
+                'label' => 'Kategori',
+                'href' => '#',
+                'icon' => '<path d="M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z" />',
+                'active' => false,
+                'attributes' => 'data-sidebar-kategori'
+            ],
+        ];
+
+        return view('dashboard.pengguna.index', compact('services', 'adminServices', 'userServices', 'roles', 'activeRole', 'search', 'heroImages', 'categories', 'allLinkTitles', 'categoriesList', 'allAdminTags', 'menuItems'));
     }
 
     public function storeUserLink(Request $request)
@@ -167,7 +191,7 @@ class DashboardController extends Controller
             'id_kategori' => $request->id_kategori,
             'role' => $request->role,
             'nik' => auth('pengguna')->user()->nik,
-            'status' => 'aktif',
+            'visibilitas' => 'ditampilkan',
         ]);
 
         if ($request->has('tag_ids')) {
@@ -336,12 +360,12 @@ class DashboardController extends Controller
         $user = auth('pengguna')->user();
 
         $request->validate([
-            'nama_user' => 'required|string|max:255',
+            'nama_pengguna' => 'required|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $data = [
-            'nama_user' => $request->nama_user,
+            'nama_pengguna' => $request->nama_pengguna,
         ];
 
         if ($request->hasFile('foto')) {
@@ -353,7 +377,7 @@ class DashboardController extends Controller
             $file = $request->file('foto');
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/profile_photos'), $filename);
-            
+
             $data['foto'] = 'uploads/profile_photos/' . $filename;
         }
 
