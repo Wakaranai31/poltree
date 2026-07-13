@@ -87,30 +87,6 @@ a {
     overflow-y: auto;
 }
 
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 28px;
-    margin-bottom: 40px;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-}
-
-.sidebar-brand .brand-dot {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--orange);
-    flex-shrink: 0;
-}
-
-.sidebar-brand .brand-orange {
-    color: var(--orange);
-}
-
 .sidebar-nav {
     display: flex;
     flex-direction: column;
