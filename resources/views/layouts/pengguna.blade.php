@@ -4,95 +4,102 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $pageTitle ?? ('Admin - '.config('app.name', 'POLTREE')) }}</title>
-    <meta name="description" content="Dashboard admin POLTREE untuk mengelola layanan, pengguna, dan kategori.">
+    <title>Dashboard Pengguna - {{ config('app.name', 'POLTREE') }}</title>
+
     {{-- Google Fonts: Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    {{-- Vite: Tailwind + CSS + JS --}}
-    @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js'])
-    @stack('styles')
+
+    {{-- Vite Assets --}}
+    @vite(['resources/css/app.css', 'resources/css/pengguna.css', 'resources/js/app.js', 'resources/js/pengguna.js'])
+
+    <script>
+        window.PolTree = {
+            availableServices: @json($allLinkTitles),
+            userNik: "{{ auth('pengguna')->user()->nik }}",
+            activeRole: "{{ $activeRole }}",
+            storeUserLinkRoute: "{{ route('pengguna.links.store') }}",
+            storeCategoryRoute: "{{ route('pengguna.categories.store') }}",
+            updateCategoryRoute: "{{ route('pengguna.categories.update', ['id' => '__ID__']) }}",
+            deleteCategoryRoute: "{{ route('pengguna.categories.destroy', ['id' => '__ID__']) }}",
+            csrfToken: "{{ csrf_token() }}"
+        };
+    </script>
 </head>
+@php
+$iconPaths = [
+'home' => '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>',
+'grid' => '<rect x="3" y="3" width="7" height="7"></rect>
+<rect x="14" y="3" width="7" height="7"></rect>
+<rect x="14" y="14" width="7" height="7"></rect>
+<rect x="3" y="14" width="7" height="7"></rect>',
+'sparkles' => '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>',
+'user' => '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+<circle cx="12" cy="7" r="4"></circle>',
+'chain' => '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>',
+'folder' => '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>',
+'tag' => '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+<line x1="7" y1="7" x2="7.01" y2="7"></line>',
+'book' => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>',
+'globe' => '<circle cx="12" cy="12" r="10"></circle>
+<line x1="2" y1="12" x2="22" y2="12"></line>
+<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>',
+'settings' => '<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>',
+'briefcase' => '<rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+<path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>',
+'heart' => '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>',
+];
+@endphp
 
 <body>
-    {{-- ═══════════════════════════════════════════════════════
-         Icon paths & asset resolver (dipakai sidebar & topbar)
-         ═══════════════════════════════════════════════════════ --}}
+    {{-- Container for premium global toasts --}}
+    <div id="toastContainer" class="toast-container"></div>
+
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast("{{ session('success') }}", 'success');
+        });
+    </script>
+    @endif
+
+    @if ($errors->any())
     @php
-    $iconAssets = [
-    'home' => 'icons/admin/home.svg',
-    'sparkles' => 'icons/admin/services.svg',
-    'user' => 'icons/admin/user.svg',
-    'chain' => 'icons/admin/links.svg',
-    'folder' => 'icons/admin/categories.svg',
-    'profile' => 'icons/admin/profile.svg',
-    'tag' => 'icons/admin/tag.svg',
-    ];
-
-    $resolveIconAsset = static function (string $key) use ($iconAssets): ?string {
-    $path = $iconAssets[$key] ?? null;
-    if (! $path) return null;
-    return file_exists(public_path($path)) ? asset($path) : null;
-    };
+    $semuaError = $errors->all();
     @endphp
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorList = @json($semuaError);
+            errorList.forEach(function(error) {
+                showToast(error, 'error');
+            });
+        });
+    </script>
+    @endif
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <div class="admin-shell">
-        {{-- ═══════════════════════════════════════════════════
-             SIDEBAR: Logo + Navigasi admin
-             ═══════════════════════════════════════════════════ --}}
-        @include('components.admin.sidebar')
-
-        <div class="admin-main">
-            {{-- ═══════════════════════════════════════════════
-                 TOPBAR: Judul halaman + Profil
-                 ═══════════════════════════════════════════════ --}}
-            @include('components.admin.header')
-
-            {{-- ═══════════════════════════════════════════════
-                 MODAL: Ubah Kata Sandi Admin
-                 ═══════════════════════════════════════════════ --}}
-            @include('components.admin.modal-password')
-
-            {{-- Container for premium global toasts --}}
-            <div id="toastContainer" class="toast-container"></div>
-
-            @if (session('success'))
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    showToast("{{ session('success') }}", 'success');
-                });
-            </script>
-            @endif
-
-            @if ($errors->any())
-            @php
-            $semuaError = $errors->all();
-            @endphp
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const errorList = @json($semuaError);
-                    errorList.forEach(function(error) {
-                        showToast(error, 'error');
-                    });
-                });
-            </script>
-            @endif
+    @if (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast("{{ session('error') }}", 'error');
+        });
+    </script>
+    @endif
 
 
-            @if (session('error'))
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    showToast("{{ session('error') }}", 'error');
-                });
-            </script>
-            @endif
+    <div class="sidebar-overlay" data-sidebar-overlay></div>
 
-            {{-- Konten halaman admin --}}
-            <main class="admin-content">
+    <div class="dashboard-layout">
+        @include('components.pengguna.sidebar')
+        <div class="main-content">
+            @include('components.pengguna.header')
+            @include('components.pengguna.modal-password')
+
+            <main class="content-area">
                 @yield('content')
             </main>
 
@@ -102,8 +109,109 @@
     </div>
 
     {{-- ═══════════════════════════════════════════════════════
-         MODAL: Konfirmasi Hapus (Global - Premium Style)
-         ═══════════════════════════════════════════════════════ --}}
+        MODAL: CRUD Link Pribadi
+    ═══════════════════════════════════════════════════════ --}}
+    <div id="linkModal" class="hidden premium-modal-overlay">
+        <div class="premium-modal-shell">
+            <div class="premium-modal-card">
+                <button type="button" onclick="closeLinkModal()" class="premium-modal-close-btn" aria-label="Tutup">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <h2 id="linkModalTitle" class="premium-modal-title">Tambah Link</h2>
+                <form id="linkForm" action="{{ route('pengguna.links.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="_method" id="linkMethod" value="POST">
+
+                    <div class="premium-modal-form-group">
+                        <label class="premium-modal-label">Nama Website</label>
+                        <input type="text" name="nama_web" id="linkTitle" placeholder="Contoh: My Portal" required class="premium-modal-input">
+                    </div>
+
+                    <div class="premium-modal-form-group">
+                        <label class="premium-modal-label">URL Website</label>
+                        <input type="text" name="url" id="linkUrl" placeholder="https://example.com" required class="premium-modal-input">
+                    </div>
+
+                    <div class="premium-modal-form-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="premium-modal-label" style="margin-bottom: 0;">Kategori</label>
+                            <button type="button" onclick="toggleUserQuickCategoryForm()" class="cb-add-link-btn" style="background: none; border: none; padding: 0; color: var(--orange);">
+                                + Tambah Kategori Baru
+                            </button>
+                        </div>
+                        <select name="id_kategori" id="linkKategori" class="premium-modal-input appearance-none cursor-pointer">
+                            <option value="">Pilih Kategori...</option>
+                            @foreach($categoriesList as $cat)
+                            <option value="{{ $cat->id_kategori }}">{{ $cat->nama_kategori }}</option>
+                            @endforeach
+                        </select>
+
+                        {{-- Quick Add Category Section (Initially Hidden) --}}
+                        <div id="userQuickCategoryContainer" class="hidden" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; flex-direction: column; gap: 8px;">
+                            <span style="font-size: 11.5px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Tambah Kategori Baru</span>
+
+                            {{-- Quick Add Icon Picker --}}
+                            <div style="margin-bottom: 6px;">
+                                <span style="display: block; font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Pilih Ikon:</span>
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px;" id="user-quick-icon-picker">
+                                    <label class="user-quick-icon-option" style="cursor: pointer; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; border: 1.5px solid transparent; background: #ffffff; transition: all 0.2s;" title="Default (Polibatam)">
+                                        <input type="radio" name="quick_icon" value="" checked style="display: none;" onchange="selectUserQuickIcon(this)">
+                                        <img src="{{ asset('images/logo-polibatam.png') }}" alt="Default" style="width: 16px; height: 16px; object-fit: contain;">
+                                    </label>
+                                    @foreach(['home', 'grid', 'sparkles', 'user', 'chain', 'folder', 'tag', 'book', 'globe', 'settings', 'briefcase', 'heart'] as $iconName)
+                                    <label class="user-quick-icon-option" data-icon-value="{{ $iconName }}" style="cursor: pointer; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; border: 1.5px solid transparent; background: #ffffff; transition: all 0.2s; color: #475569;" title="{{ $iconName }}">
+                                        <input type="radio" name="quick_icon" value="{{ $iconName }}" style="display: none;" onchange="selectUserQuickIcon(this)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            {!! $iconPaths[$iconName] !!}
+                                        </svg>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; align-items: center; width: 100%;">
+                                <input type="text" id="user_quick_nama_kategori" placeholder="Nama Kategori..." class="premium-modal-input" style="height: 38px; min-height: 0; padding: 0 12px; font-size: 13px; flex: 1; border-radius: 8px; background: #ffffff;">
+                                <button type="button" onclick="submitUserQuickCategory()" style="height: 38px; padding: 0 16px; border-radius: 8px; background: var(--orange, #f97316); color: white; font-size: 12px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
+                                    Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="role" id="linkRole" value="">
+
+                    <div class="premium-modal-form-group">
+                        <label class="premium-modal-label">Tag (Opsional)</label>
+                        <div class="premium-modal-tags-wrapper">
+                            @foreach ($allAdminTags as $tag)
+                            <label class="premium-modal-tag-pill">
+                                <input type="checkbox" name="tag_ids[]" value="{{ $tag->id_tag }}" class="user-tag-checkbox">
+                                <span>{{ $tag->nama_tag }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="premium-modal-form-group">
+                        <label class="premium-modal-label">Deskripsi</label>
+                        <textarea name="deskripsi" id="linkDescription" placeholder="Deskripsi singkat..." class="premium-modal-textarea"></textarea>
+                    </div>
+
+                    <div class="premium-modal-actions">
+                        <button type="button" onclick="closeLinkModal()" class="premium-modal-btn btn-cancel">Batal</button>
+                        <button type="submit" class="premium-modal-btn btn-save">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════════════════════════════
+        MODAL: Konfirmasi Hapus (Global - Premium Style)
+    ═══════════════════════════════════════════════════════ --}}
     <div id="confirmDeleteModal" class="hidden premium-modal-overlay">
         <div class="premium-modal-shell">
             <div class="premium-modal-card">
@@ -156,17 +264,17 @@
 
                 <h2 class="premium-modal-title" style="margin-bottom: 20px;">Profil Saya</h2>
 
-                <form id="profileForm" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                <form id="profileForm" action="{{ route('pengguna.profile.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="profile-avatar-section" style="text-align: center; margin-bottom: 20px;">
                         <div class="profile-avatar-wrapper" onclick="triggerProfilePhotoUpload()" style="position: relative; width: 80px; height: 80px; margin: 0 auto 12px; cursor: default; transition: all 0.2s ease;">
                             <div id="profileAvatarCircle" style="width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #080d5f, #0f179e); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(8, 13, 95, 0.15); border: 2px solid #fff;">
-                                @if(auth('admin')->user()->foto)
-                                <img id="profileAvatarImg" src="{{ asset(auth('admin')->user()->foto) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                @if(auth('pengguna')->user()->foto)
+                                <img id="profileAvatarImg" src="{{ asset(auth('pengguna')->user()->foto) }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 @else
                                 <span id="profileAvatarInitials" style="font-size: 28px; font-weight: 700; color: white; text-transform: uppercase;">
-                                    {{ substr(auth('admin')->user()->nama_admin ?? 'A', 0, 1) }}
+                                    {{ substr(auth('pengguna')->user()->nama_pengguna ?? 'P', 0, 1) }}
                                 </span>
                                 @endif
                             </div>
@@ -181,16 +289,16 @@
                         </div>
 
                         <h3 class="profile-view-only" style="font-size: 16.5px; font-weight: 700; color: #1e2243; margin-bottom: 4px;">
-                            {{ auth('admin')->user()->nama_admin ?? '-' }}
+                            {{ auth('pengguna')->user()->nama_pengguna ?? '-' }}
                         </h3>
 
                         <div class="profile-edit-only" style="display: none; flex-direction: column; align-items: stretch; width: 100%; max-width: 280px; margin: 0 auto 10px;">
                             <label class="premium-modal-label" style="text-align: left; font-size: 11px; margin-bottom: 4px;">Nama Lengkap</label>
-                            <input type="text" name="nama_admin" value="{{ auth('admin')->user()->nama_admin }}" required class="premium-modal-input" style="width: 100%; text-align: center; font-weight: 700; font-size: 14.5px; height: 38px; border-radius: 10px;">
+                            <input type="text" name="nama_pengguna" value="{{ auth('pengguna')->user()->nama_pengguna }}" required class="premium-modal-input" style="width: 100%; text-align: center; font-weight: 700; font-size: 14.5px; height: 38px; border-radius: 10px;">
                         </div>
 
                         <span style="display: inline-block; font-size: 10.5px; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: #eef1f8; color: #080d5f; text-transform: uppercase; letter-spacing: 0.5px;">
-                            Administrator
+                            {{ auth('pengguna')->user()->jabatan ?? 'Pengguna' }}
                         </span>
                     </div>
 
@@ -198,7 +306,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(8, 13, 95, 0.08); padding-bottom: 8px;">
                             <span style="font-size: 12.5px; font-weight: 600; color: #8a8fa5;">Nomor Induk (NIK)</span>
                             <span style="font-size: 12.5px; font-weight: 700; color: #1e2243;">
-                                {{ auth('admin')->user()->nik_admin ?? '-' }}
+                                {{ auth('pengguna')->user()->nik ?? '-' }}
                             </span>
                         </div>
 
@@ -211,7 +319,7 @@
                                 </svg>
                             </span>
                             <span style="font-size: 12.5px; font-weight: 700; color: #8a8fa5;">
-                                {{ auth('admin')->user()->email ?? '-' }}
+                                {{ auth('pengguna')->user()->email ?? '-' }}
                             </span>
                         </div>
 
@@ -247,39 +355,14 @@
         </div>
     </div>
 
-    {{-- ═══════════════════════════════════════════════════════
-         SCRIPT: Profil toggle & Password modal
-         ═══════════════════════════════════════════════════════ --}}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const profileToggle = document.querySelector('[data-profile-toggle]');
-            const profilePanel = document.querySelector('[data-profile-panel]');
-
-            if (profileToggle && profilePanel) {
-                profileToggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const isHidden = profilePanel.hasAttribute('hidden');
-                    if (isHidden) {
-                        profilePanel.removeAttribute('hidden');
-                    } else {
-                        profilePanel.setAttribute('hidden', '');
-                    }
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (!profilePanel.hasAttribute('hidden') && !profilePanel.contains(e.target) && e.target !== profileToggle) {
-                        profilePanel.setAttribute('hidden', '');
-                    }
-                });
-            }
-        });
-
+        /* ── Profile Modal ────────────────────────────────────── */
         function openProfileModal() {
             const m = document.getElementById('profileModal');
             m.classList.remove('hidden');
             m.classList.add('flex');
 
-            // Close topbar profile panel
+            // Close profile panel
             const profilePanel = document.querySelector('[data-profile-panel]');
             if (profilePanel) {
                 profilePanel.setAttribute('hidden', '');
@@ -293,7 +376,7 @@
             setTimeout(() => {
                 m.classList.add('hidden');
                 m.classList.remove('flex', 'closing');
-                toggleProfileEditMode(false); // Reset to view mode on close
+                toggleProfileEditMode(false); // Reset on close
             }, 300);
         }
 
@@ -319,8 +402,8 @@
                 document.getElementById('profileForm').reset();
 
                 // Restore original preview
-                const originalFoto = "{{ auth('admin')->user()->foto ? asset(auth('admin')->user()->foto) : '' }}";
-                const originalInitials = "{{ substr(auth('admin')->user()->nama_admin ?? 'A', 0, 1) }}";
+                const originalFoto = "{{ auth('pengguna')->user()->foto ? asset(auth('pengguna')->user()->foto) : '' }}";
+                const originalInitials = "{{ substr(auth('pengguna')->user()->nama_pengguna ?? 'P', 0, 1) }}";
                 const circle = document.getElementById('profileAvatarCircle');
                 if (originalFoto) {
                     circle.innerHTML = `<img id="profileAvatarImg" src="${originalFoto}" style="width: 100%; height: 100%; object-fit: cover;">`;
@@ -349,22 +432,6 @@
                 };
                 reader.readAsDataURL(file);
             }
-        }
-
-        function openPasswordModal() {
-            const m = document.getElementById('passwordModal');
-            m.classList.remove('hidden');
-            m.classList.add('flex');
-        }
-
-        function closePasswordModal() {
-            const m = document.getElementById('passwordModal');
-            if (!m) return;
-            m.classList.add('closing');
-            setTimeout(() => {
-                m.classList.add('hidden');
-                m.classList.remove('flex', 'closing');
-            }, 300);
         }
 
         /* ── Confirm Delete Modal ─────────────────────────────── */
@@ -456,240 +523,110 @@
             }, 4000);
         };
 
-        // ── Premium Custom Select ──
-        window.initPremiumSelect = function(selectEl) {
-            if (!selectEl || selectEl.dataset.premiumSelectInitialized) {
+        /* ── Quick Add Icon Picker Helpers ──────────────────── */
+        function selectUserQuickIcon(radio) {
+            document.querySelectorAll('.user-quick-icon-option').forEach(function(lbl) {
+                lbl.style.borderColor = 'transparent';
+                lbl.style.background = '#ffffff';
+                lbl.style.color = '#475569';
+            });
+            var parent = radio.parentElement;
+            parent.style.borderColor = '#080d5f';
+            parent.style.background = 'rgba(8, 13, 95, 0.05)';
+            parent.style.color = '#080d5f';
+        }
+
+        function resetQuickIconPicker() {
+            var defaultRadio = document.querySelector('input[name="quick_icon"][value=""]');
+            if (defaultRadio) {
+                defaultRadio.checked = true;
+                selectUserQuickIcon(defaultRadio);
+            }
+        }
+
+        function toggleUserQuickCategoryForm() {
+            const container = document.getElementById('userQuickCategoryContainer');
+            if (container) {
+                if (container.style.display === 'none' || container.classList.contains('hidden')) {
+                    container.classList.remove('hidden');
+                    container.style.display = 'flex';
+                    resetQuickIconPicker();
+                    document.getElementById('user_quick_nama_kategori').focus();
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+        }
+
+        function submitUserQuickCategory() {
+            const nameInput = document.getElementById('user_quick_nama_kategori');
+            const name = nameInput ? nameInput.value.trim() : '';
+
+            if (!name) {
+                showToast('Nama kategori tidak boleh kosong.', 'error');
                 return;
             }
 
-            // Hide original select
-            selectEl.style.display = 'none';
+            // Get the selected icon
+            const selectedIcon = document.querySelector('input[name="quick_icon"]:checked');
+            const iconValue = selectedIcon ? selectedIcon.value : '';
 
-            // Create wrapper
-            const wrapper = document.createElement('div');
-            wrapper.className = 'premium-select-wrapper';
-
-            // Insert wrapper before selectEl
-            selectEl.parentNode.insertBefore(wrapper, selectEl);
-            wrapper.appendChild(selectEl); // move selectEl inside wrapper
-
-            // Create trigger
-            const trigger = document.createElement('div');
-            trigger.className = 'premium-select-trigger';
-            trigger.setAttribute('tabindex', '0');
-
-            const triggerText = document.createElement('span');
-            triggerText.className = 'trigger-text';
-
-            const currentOption = selectEl.options[selectEl.selectedIndex];
-            triggerText.textContent = currentOption ? currentOption.textContent : 'Pilih...';
-
-            const triggerArrow = document.createElement('span');
-            triggerArrow.className = 'trigger-arrow';
-            triggerArrow.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
-
-            trigger.appendChild(triggerText);
-            trigger.appendChild(triggerArrow);
-            wrapper.appendChild(trigger);
-
-            // Create options container - Append to document.body to avoid clipping
-            const optionsContainer = document.createElement('div');
-            optionsContainer.className = 'premium-select-options';
-            document.body.appendChild(optionsContainer);
-
-            // Build option items function
-            const buildOptions = function() {
-                optionsContainer.innerHTML = '';
-                Array.from(selectEl.options).forEach(function(opt, idx) {
-                    const optEl = document.createElement('div');
-                    optEl.className = 'premium-select-option';
-                    if (opt.selected) {
-                        optEl.classList.add('is-selected');
-                    }
-                    optEl.dataset.value = opt.value;
-                    optEl.dataset.index = idx;
-
-                    const optText = document.createElement('span');
-                    optText.textContent = opt.textContent;
-
-                    const optCheck = document.createElement('span');
-                    optCheck.className = 'option-check';
-                    optCheck.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px; height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-
-                    optEl.appendChild(optText);
-                    optEl.appendChild(optCheck);
-
-                    optEl.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        selectEl.selectedIndex = idx;
-                        triggerText.textContent = opt.textContent;
-
-                        // Trigger change event on original select
-                        const event = new Event('change', {
-                            bubbles: true
+            fetch("{{ route('pengguna.categories.store') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nama_kategori: name,
+                        icon: iconValue
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errData => {
+                            throw new Error(errData.message || 'Terjadi kesalahan validasi.');
+                        }).catch(() => {
+                            throw new Error('Gagal memproses respons server.');
                         });
-                        selectEl.dispatchEvent(event);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message, 'success');
 
-                        closeDropdown();
-                    });
-
-                    optionsContainer.appendChild(optEl);
-                });
-            };
-
-            const toggleDropdown = function() {
-                const isOpen = optionsContainer.classList.contains('is-open');
-                if (isOpen) {
-                    closeDropdown();
-                } else {
-                    openDropdown();
-                }
-            };
-
-            const openDropdown = function() {
-                // Close all other open premium selects first
-                document.querySelectorAll('.premium-select-options.is-open').forEach(function(el) {
-                    if (el !== optionsContainer) {
-                        el.classList.remove('is-open');
-                        const triggerEl = document.querySelector('.premium-select-trigger.is-active');
-                        if (triggerEl) {
-                            triggerEl.classList.remove('is-active');
+                        // Add to dropdown and select it
+                        const select = document.getElementById('linkKategori');
+                        if (select) {
+                            const opt = document.createElement('option');
+                            opt.value = data.category.id_kategori;
+                            opt.textContent = data.category.nama_kategori;
+                            select.appendChild(opt);
+                            select.value = data.category.id_kategori;
+                            if (typeof select.refreshPremiumSelect === 'function') {
+                                select.refreshPremiumSelect();
+                            }
                         }
-                    }
-                });
 
-                buildOptions(); // Rebuild options to reflect current selection/state
-
-                // Position options list right under the trigger
-                const rect = trigger.getBoundingClientRect();
-                optionsContainer.style.position = 'fixed';
-                optionsContainer.style.top = `${rect.bottom + 6}px`;
-                optionsContainer.style.left = `${rect.left}px`;
-                optionsContainer.style.width = `${rect.width}px`;
-                optionsContainer.style.zIndex = '99999';
-
-                optionsContainer.classList.add('is-open');
-                trigger.classList.add('is-active');
-            };
-
-            const closeDropdown = function() {
-                optionsContainer.classList.remove('is-open');
-                trigger.classList.remove('is-active');
-            };
-
-            trigger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                toggleDropdown();
-            });
-
-            // Focus and keyboard navigation
-            trigger.addEventListener('keydown', function(e) {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    toggleDropdown();
-                } else if (e.key === 'Escape') {
-                    closeDropdown();
-                }
-            });
-
-            // Close on click outside
-            document.addEventListener('click', function(e) {
-                if (!wrapper.contains(e.target) && !optionsContainer.contains(e.target)) {
-                    closeDropdown();
-                }
-            });
-
-            // Close dropdowns on scroll or window resize to prevent floating issues
-            window.addEventListener('scroll', closeDropdown, true);
-            window.addEventListener('resize', closeDropdown);
-
-            // Mark as initialized
-            selectEl.dataset.premiumSelectInitialized = 'true';
-
-            // Add reference on original select element so we can manually trigger update/refresh
-            selectEl.refreshPremiumSelect = function() {
-                const opt = selectEl.options[selectEl.selectedIndex];
-                triggerText.textContent = opt ? opt.textContent : 'Pilih...';
-            };
-        };
-
-        // Automatically initialize all custom selects on DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const selects = document.querySelectorAll('select.premium-modal-input, select.services-select');
-            selects.forEach(function(select) {
-                window.initPremiumSelect(select);
-            });
-
-            // ── Mobile Sidebar Toggle ──
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.querySelector('.admin-sidebar');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-            if (sidebarToggle && sidebar && sidebarOverlay) {
-                const openSidebar = () => {
-                    sidebar.classList.add('open');
-                    sidebarOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                };
-
-                const closeSidebar = () => {
-                    sidebar.classList.remove('open');
-                    sidebarOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                };
-
-                sidebarToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (sidebar.classList.contains('open')) {
-                        closeSidebar();
+                        // Reset input, icon picker & hide
+                        nameInput.value = '';
+                        resetQuickIconPicker();
+                        const container = document.getElementById('userQuickCategoryContainer');
+                        if (container) {
+                            container.style.display = 'none';
+                        }
                     } else {
-                        openSidebar();
+                        showToast(data.message || 'Gagal menambahkan kategori.', 'error');
                     }
+                })
+                .catch(error => {
+                    console.error('Error adding category:', error);
+                    showToast(error.message || 'Terjadi kesalahan saat menambahkan kategori.', 'error');
                 });
-
-                sidebarOverlay.addEventListener('click', closeSidebar);
-            }
-        });
-
-        // Global View Mode Toggle Handler
-        window.initializeViewModeToggle = function(pageKey) {
-            const wrapper = document.querySelector('.view-wrapper');
-            if (!wrapper) return;
-
-            // Get stored preference (default: table)
-            const savedMode = localStorage.getItem(`poltree_view_mode_${pageKey}`) || 'table';
-
-            // Apply saved mode
-            wrapper.classList.remove('view-mode-table', 'view-mode-card');
-            wrapper.classList.add(`view-mode-${savedMode}`);
-
-            // Update active state of buttons
-            document.querySelectorAll('.view-toggle-btn').forEach(btn => {
-                const mode = btn.getAttribute('data-view-mode');
-                if (mode === savedMode) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-
-                // Add click listener
-                btn.addEventListener('click', function() {
-                    const selectedMode = this.getAttribute('data-view-mode');
-                    localStorage.setItem(`poltree_view_mode_${pageKey}`, selectedMode);
-
-                    wrapper.classList.remove('view-mode-table', 'view-mode-card');
-                    wrapper.classList.add(`view-mode-${selectedMode}`);
-
-                    document.querySelectorAll('.view-toggle-btn').forEach(b => {
-                        b.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
-            });
-        };
+        }
     </script>
-    @stack('modals')
-    @stack('scripts')
 </body>
 
 </html>
