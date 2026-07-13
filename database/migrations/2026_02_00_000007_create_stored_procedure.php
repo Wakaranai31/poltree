@@ -29,7 +29,7 @@ return new class extends Migration
                 -- Aggregate query
                 SELECT 
                     COUNT(*),
-                    SUM(IF(status = 'aktif', 1, 0)),
+                    SUM(IF(visibilitas = 'ditampilkan', 1, 0)),
                     AVG(IF(status_response_time_ms IS NOT NULL, status_response_time_ms, 0))
                 INTO 
                     out_total_links,
@@ -65,8 +65,8 @@ return new class extends Migration
         try {
             DB::unprepared("
                 ALTER TABLE t_link
-                ADD CONSTRAINT chk_link_status
-                CHECK (status IN ('aktif', 'bermasalah'))
+                ADD CONSTRAINT chk_link_visibilitas
+                CHECK (visibilitas IN ('ditampilkan', 'disembunyikan'))
             ");
         } catch (\Throwable $e) {
             // Fallback: older MySQL versions may not support CHECK constraints
@@ -79,7 +79,7 @@ return new class extends Migration
 
 
         try {
-            DB::unprepared("ALTER TABLE t_link DROP CONSTRAINT IF EXISTS chk_link_status");
+            DB::unprepared("ALTER TABLE t_link DROP CONSTRAINT IF EXISTS chk_link_visibilitas");
         } catch (\Throwable $e) {
         }
     }

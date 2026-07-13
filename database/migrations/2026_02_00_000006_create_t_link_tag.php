@@ -7,17 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Create the tags system: t_tag and t_link_tag pivot table.
+     * Create the t_link_tag pivot table.
      */
     public function up(): void
     {
-        if (!Schema::hasTable('t_tag')) {
-            Schema::create('t_tag', function (Blueprint $table) {
-                $table->id('id_tag');
-                $table->string('nama_tag')->unique();
-            });
-        }
-
         if (!Schema::hasTable('t_link_tag')) {
             Schema::create('t_link_tag', function (Blueprint $table) {
                 $table->id();
@@ -43,6 +36,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('t_link_tag');
-        Schema::dropIfExists('t_tag');
     }
 };

@@ -20,7 +20,7 @@ class KategoriSeeder extends Seeder
                 'icon'          => null,
             ],
             [
-                'id_kategori'   => 9,
+                'id_kategori'   => 2,
                 'nik'           => null,
                 'nama_kategori' => 'Umum',
                 'icon'          => 'grid',

@@ -15,7 +15,7 @@ class Link extends Model
 
     protected $fillable = [
         'id_link', 'id_kategori', 'nik', 'nama_web', 'url', 'deskripsi',
-        'tag', 'role', 'status', 'status_link', 'hit_point',
+        'tag', 'role', 'visibilitas', 'status_link', 'hit_point',
         'status_checked_at', 'status_http_code',
         'status_response_time_ms', 'status_summary',
     ];
@@ -46,11 +46,11 @@ class Link extends Model
         return $url;
     }
 
-    public function getResolvedStatusAttribute(): string
+    public function getResolvedVisibilitasAttribute(): string
     {
-        $status = Str::lower(trim((string) $this->status));
+        $visibilitas = Str::lower(trim((string) $this->visibilitas));
 
-        return $status !== '' ? $status : 'tidak diketahui';
+        return $visibilitas !== '' ? $visibilitas : 'tidak diketahui';
     }
 
     public function tags()

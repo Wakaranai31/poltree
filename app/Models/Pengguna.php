@@ -17,8 +17,8 @@ class Pengguna extends Authenticatable implements CanResetPasswordContract
 
     protected $fillable = [
         'nik',
-        'username',
-        'nama_user',
+
+        'nama_pengguna',
         'password',
         'email',
         'jabatan',
@@ -40,6 +40,6 @@ class Pengguna extends Authenticatable implements CanResetPasswordContract
     {
         $resetUrl = route('password.reset', ['token' => $token, 'email' => $this->email]);
         \Illuminate\Support\Facades\Mail::to($this->email)
-            ->send(new \App\Mail\ResetPasswordMail($resetUrl, $this->nama_user));
+            ->send(new \App\Mail\ResetPasswordMail($resetUrl, $this->nama_pengguna));
     }
 }

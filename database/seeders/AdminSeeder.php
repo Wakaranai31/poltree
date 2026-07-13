@@ -15,12 +15,11 @@ class AdminSeeder extends Seeder
     {
         DB::table('t_admin')->insert([
             [
-                'nik_admin' => 222336,
-                'username'  => 'Administrator',
-                'nama'      => 'Administrator',
+                'nik_admin' => 000001,
+                'nama_admin'      => 'Administrator',
                 'email'     => null,
                 'foto'      => null,
-                'password'  => Hash::make('Admin23'),
+                'password'  => Hash::make('Admin123'),
             ],
         ]);
     }

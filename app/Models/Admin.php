@@ -15,8 +15,8 @@ class Admin extends Authenticatable implements CanResetPasswordContract
 
     protected $fillable = [
         'nik_admin',
-        'username',
-        'nama',
+
+        'nama_admin',
         'email',
         'password',
         'foto',
@@ -44,6 +44,6 @@ class Admin extends Authenticatable implements CanResetPasswordContract
     {
         $resetUrl = route('password.reset', ['token' => $token, 'email' => $this->email]);
         \Illuminate\Support\Facades\Mail::to($this->email)
-            ->send(new \App\Mail\ResetPasswordMail($resetUrl, $this->nama));
+            ->send(new \App\Mail\ResetPasswordMail($resetUrl, $this->nama_admin));
     }
 }

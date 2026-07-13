@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('url', 255);
             $table->text('deskripsi')->nullable();
             $table->enum('role', ['Dosen', 'Tata Usaha', 'Laboran'])->nullable();
-            $table->string('status', 50)->default('aktif');
+            $table->enum('visibilitas', ['ditampilkan', 'disembunyikan'])->default('ditampilkan');
             $table->string('status_link', 50)->default('belum dicek');
             $table->timestamp('status_checked_at')->nullable();
             $table->unsignedSmallInteger('status_http_code')->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('hit_point')->default(0);
 
             // Indexes
-            $table->index('status');
+            $table->index('visibilitas');
             $table->index('status_link');
             $table->index('id_kategori');
             $table->index('nik');

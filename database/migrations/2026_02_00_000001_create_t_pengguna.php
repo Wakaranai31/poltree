@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('t_pengguna', function (Blueprint $table) {
             $table->integer('nik')->primary();
-            $table->string('username', 50)->nullable()->unique();
-            $table->string('nama_user', 150);
+            $table->string('nama_pengguna', 150);
             $table->string('password', 255);
             $table->string('email', 150)->unique();
             $table->string('jabatan', 50);

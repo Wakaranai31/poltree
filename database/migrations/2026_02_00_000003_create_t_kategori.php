@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nik', 50)->nullable();
             $table->string('nama_kategori', 100);
             $table->string('icon', 100)->nullable();
-
             $table->index('nik');
         });
     }
