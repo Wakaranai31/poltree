@@ -40,9 +40,7 @@
     <div class="search-container">
         <form action="{{ route('admin.tags') }}" method="GET" class="search-input-wrap">
             <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+    {!! config('icons.ui_cari') !!}\n</svg>
             <input type="text" name="q" value="{{ $search }}" class="search-input" placeholder="Cari tag admin...">
         </form>
     </div>
@@ -89,18 +87,14 @@
                                         <div class="action-btns justify-center items-center">
                                             <button type="button" class="btn-action btn-edit shadow-sm" title="Edit" onclick="editTag({{ $tag->id_tag }}, '{{ $tag->nama_tag }}', this)">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                </svg>
+    {!! config('icons.ui_edit') !!}\n</svg>
                                             </button>
                                             <form action="{{ route('admin.tags.destroy', $tag->id_tag) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus tag &quot;{{ $tag->nama_tag }}&quot;?')" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn-action btn-delete shadow-sm" title="Hapus">
                                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                    </svg>
+    {!! config('icons.ui_hapus') !!}\n</svg>
                                                 </button>
                                             </form>
                                         </div>
@@ -120,18 +114,14 @@
                             <div class="category-actions">
                                 <button type="button" class="btn-mini-action btn-mini-edit" title="Edit" onclick="editTag({{ $tag->id_tag }}, '{{ $tag->nama_tag }}', this)">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                    </svg>
+    {!! config('icons.ui_edit') !!}\n</svg>
                                 </button>
                                 <form action="{{ route('admin.tags.destroy', $tag->id_tag) }}" method="POST" onsubmit="event.preventDefault(); confirmDelete(this, 'Apakah Anda yakin ingin menghapus tag &quot;{{ $tag->nama_tag }}&quot;?')" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-mini-action btn-mini-delete" title="Hapus">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                        </svg>
+    {!! config('icons.ui_hapus') !!}\n</svg>
                                     </button>
                                 </form>
                             </div>
@@ -191,9 +181,7 @@
             <div class="premium-modal-card">
                 <button type="button" onclick="closeModal()" class="premium-modal-close-btn" aria-label="Tutup">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+    {!! config('icons.ui_tutup') !!}\n</svg>
                 </button>
 
                 <h2 id="modalTitle" class="premium-modal-title">Tambah Tag</h2>

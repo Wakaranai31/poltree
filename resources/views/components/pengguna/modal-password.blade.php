@@ -3,9 +3,7 @@
         <div class="premium-modal-card">
             <button type="button" onclick="closePasswordModal()" class="premium-modal-close-btn" aria-label="Tutup">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
+    {!! config('icons.ui_tutup') !!}\n</svg>
             </button>
 
             <h2 class="premium-modal-title">Ubah Kata Sandi</h2>

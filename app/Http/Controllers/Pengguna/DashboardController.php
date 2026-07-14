@@ -143,21 +143,21 @@ class DashboardController extends Controller
             [
                 'label' => 'Semua Layanan',
                 'href' => '#',
-                'icon' => '<circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />',
+                'icon' => config('icons.globe'),
                 'active' => false,
                 'attributes' => 'data-all-services-btn'
             ],
             [
                 'label' => 'Halaman Saya',
                 'href' => route('pengguna.dashboard'),
-                'icon' => '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" /><polyline points="9 22 9 12 15 12 15 22" />',
+                'icon' => config('icons.home'),
                 'active' => request()->routeIs('pengguna.dashboard'),
                 'attributes' => 'data-sidebar-beranda'
             ],
             [
                 'label' => 'Kategori',
                 'href' => '#',
-                'icon' => '<path d="M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z" />',
+                'icon' => config('icons.grid'),
                 'active' => false,
                 'attributes' => 'data-sidebar-kategori'
             ],

@@ -2,10 +2,7 @@
     <div class="topbar-inner">
         <button type="button" class="mobile-menu-btn" data-mobile-menu-toggle aria-label="Menu">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
+    {!! config('icons.ui_menu') !!}\n</svg>
         </button>
 
         <form class="search-box" role="search" action="{{ route('pengguna.dashboard') }}" method="GET">
@@ -70,8 +67,7 @@
                         <button type="submit" class="profile-panel-btn logout-btn">
                             <div class="btn-icon-wrap">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14l5-5-5-5m5 5H9" />
-                                </svg>
+    {!! config('icons.ui_keluar') !!}\n</svg>
                             </div>
                             <span>Keluar</span>
                         </button>

@@ -33,14 +33,14 @@ $iconPaths = config('icons');
 <nav class="tab-nav" aria-label="Tab navigasi">
     <button type="button" class="tab-btn active" data-shortcut-saved-toggle>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-            <path d="M5 5h14v16l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" stroke-linejoin="round" />
+            {!! config('icons.home') !!}
         </svg>
-        <span>Tersimpan</span>
+        <span>Halaman Saya</span>
     </button>
 
     <button type="button" class="tab-btn" data-tab-kategori>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M3 3h7v7H3V3Zm11 0h7v7h-7V3ZM3 14h7v7H3v-7Zm11 0h7v7h-7v-7Z" />
+            {!! config('icons.grid') !!}
         </svg>
         <span>Kategori</span>
     </button>
@@ -54,23 +54,21 @@ $iconPaths = config('icons');
     </div>
     <button type="button" class="filter-indicator-clear" id="clear-category-filter-btn" aria-label="Hapus filter">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+            {!! config('icons.ui_tutup') !!}\n</svg>
     </button>
 </div>
 
 {{-- ═══════════════════════════════════════════════════════
-                    VIEW: TERSIMPAN
-                ═══════════════════════════════════════════════════════ --}}
+                    VIEW: Halaman Saya
+═══════════════════════════════════════════════════════ --}}
 <div id="view-tersimpan" class="section-block">
     {{-- Layanan Utama --}}
     @if (!$adminServices->isEmpty())
     <div class="section-block" data-section="official">
         <div class="section-header">
             <div class="section-header-left">
-                <h2><span class="section-title-highlight">Lay</span>anan Resmi</h2>
-                <p>Akses cepat ke layanan resmi Politeknik Negeri Batam</p>
+                <h2>Layanan Resmi</h2>
+                <p>Akses cepat ke layanan Politeknik Negeri Batam</p>
             </div>
         </div>
         <div class="cards-grid">
@@ -90,8 +88,7 @@ $iconPaths = config('icons');
             </div>
             <button type="button" class="section-add-btn" onclick="openLinkModal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    {!! $iconPaths['plus'] !!}
                 </svg>
                 <span>Link</span>
             </button>
@@ -106,9 +103,7 @@ $iconPaths = config('icons');
         @else
         <div class="premium-dashed-empty">
             <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
+                {!! config('icons.ui_tautan') !!}\n</svg>
             <div class="empty-title">Belum ada link pribadi ditambahkan</div>
             <div class="empty-desc">Tautan website kustom buatan Anda akan muncul di sini. Silakan klik tombol "+ Link" di atas untuk menambahkan.</div>
         </div>
@@ -151,9 +146,7 @@ $iconPaths = config('icons');
             @if($category->nik === auth('pengguna')->user()->nik)
             <button type="button" class="folder-edit-btn" data-category-edit-toggle="{{ $category->nama_kategori }}" data-category-db-id="{{ $category->id_kategori }}" aria-label="Edit Kategori">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4L18.5 2.5z"></path>
-                </svg>
+                    {!! config('icons.ui_edit') !!}\n</svg>
             </button>
             @endif
             <div class="folder-header">
@@ -179,8 +172,7 @@ $iconPaths = config('icons');
             <div class="folder-header">
                 <div class="dashed-folder-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        {!! $iconPaths['plus'] !!}
                     </svg>
                 </div>
             </div>
@@ -201,21 +193,17 @@ $iconPaths = config('icons');
     <p class="text-lg font-medium">Belum ada layanan tersedia</p>
 </div>
 @endif
-</div>
-</div>
-</div>
+
 
 {{-- ═══════════════════════════════════════════════════════
-        CATEGORY BUILDER MODAL (Premium Style)
+        MODAL TAMBAH KATEGORI
     ═══════════════════════════════════════════════════════ --}}
 <div class="hidden premium-modal-overlay" data-category-builder-modal>
     <div class="premium-modal-shell" style="max-width: 500px;">
         <div class="premium-modal-card" role="dialog" aria-modal="true" aria-labelledby="category-builder-title-label">
             <button type="button" class="premium-modal-close-btn" data-category-builder-close aria-label="Tutup">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
+                    {!! config('icons.ui_tutup') !!}\n</svg>
             </button>
 
             <h2 id="category-builder-title-label" class="premium-modal-title" data-category-builder-modal-title>Tambah Kategori</h2>
@@ -259,10 +247,7 @@ $iconPaths = config('icons');
                 <button type="button" class="premium-modal-btn btn-cancel" data-category-builder-close>Batal</button>
                 <button type="button" class="premium-modal-btn btn-save" data-category-builder-save>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                        <polyline points="7 3 7 8 15 8"></polyline>
-                    </svg>
+                        {!! config('icons.ui_simpan') !!}\n</svg>
                     Simpan Kategori
                 </button>
             </div>
@@ -271,9 +256,7 @@ $iconPaths = config('icons');
             <div class="cb-delete-section" data-category-builder-delete-section style="display: none;">
                 <button type="button" class="cb-delete-btn" data-category-builder-reset>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
+                        {!! config('icons.ui_hapus') !!}\n</svg>
                     Hapus Kategori
                 </button>
             </div>

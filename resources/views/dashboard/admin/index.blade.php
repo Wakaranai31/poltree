@@ -31,9 +31,7 @@
             </svg>
             @elseif($stat['icon'] === 'link')
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#080d5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
+    {!! config('icons.ui_tautan') !!}\n</svg>
             @else
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#080d5f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>

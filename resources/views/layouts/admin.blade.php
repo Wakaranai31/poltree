@@ -109,9 +109,7 @@
             <div class="premium-modal-card">
                 <button type="button" onclick="closeConfirmModal()" class="premium-modal-close-btn" aria-label="Tutup">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+    {!! config('icons.ui_tutup') !!}\n</svg>
                 </button>
 
                 <h2 class="premium-modal-title">Konfirmasi Hapus</h2>
@@ -119,10 +117,7 @@
                 <div style="text-align: center; margin-bottom: 24px;">
                     <div style="width: 56px; height: 56px; margin: 0 auto 16px; border-radius: 50%; background: #fff0ed; display: flex; align-items: center; justify-content: center;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#ff3f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 28px; height: 28px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
+    {!! config('icons.ui_peringatan') !!}\n</svg>
                     </div>
                     <p id="confirmDeleteMessage" style="font-size: 14px; color: #555b77; line-height: 1.6; font-weight: 500;">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
                 </div>
@@ -131,9 +126,7 @@
                     <button type="button" class="premium-modal-btn btn-cancel" onclick="closeConfirmModal()">Batal</button>
                     <button type="button" class="premium-modal-btn btn-save" style="background: #ff3f0a; box-shadow: 0 6px 18px rgba(255, 63, 10, 0.2);" id="confirmDeleteBtn" onclick="executeDelete()">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; display: inline-block; vertical-align: middle;">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
+    {!! config('icons.ui_hapus') !!}\n</svg>
                         <span style="vertical-align: middle;">Hapus</span>
                     </button>
                 </div>
@@ -149,9 +142,7 @@
             <div class="premium-modal-card" style="max-width: 440px; padding: 28px 24px 20px;">
                 <button type="button" onclick="closeProfileModal()" class="premium-modal-close-btn" aria-label="Tutup">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+    {!! config('icons.ui_tutup') !!}\n</svg>
                 </button>
 
                 <h2 class="premium-modal-title" style="margin-bottom: 20px;">Profil Saya</h2>
@@ -416,18 +407,12 @@
             } else if (type === 'error') {
                 icon = `
                     <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
+    {!! config('icons.ui_peringatan') !!}\n</svg>
                 `;
             } else {
                 icon = `
                     <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="9" x2="12" y2="13"></line>
-                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                    </svg>
+    {!! config('icons.ui_peringatan_alt') !!}\n</svg>
                 `;
             }
 
@@ -437,9 +422,7 @@
                     <div class="toast-message">${message}</div>
                     <button type="button" class="toast-close-btn" onclick="this.parentElement.parentElement.remove()" aria-label="Tutup">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
+    {!! config('icons.ui_tutup') !!}\n</svg>
                     </button>
                 </div>
                 <div class="toast-progress-bar"></div>
@@ -486,7 +469,8 @@
 
             const triggerArrow = document.createElement('span');
             triggerArrow.className = 'trigger-arrow';
-            triggerArrow.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+            triggerArrow.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;">
+    {!! config('icons.ui_panah_bawah') !!}\n</svg>`;
 
             trigger.appendChild(triggerText);
             trigger.appendChild(triggerArrow);
@@ -514,7 +498,8 @@
 
                     const optCheck = document.createElement('span');
                     optCheck.className = 'option-check';
-                    optCheck.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px; height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                    optCheck.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px; height:12px;">
+    {!! config('icons.ui_centang') !!}\n</svg>`;
 
                     optEl.appendChild(optText);
                     optEl.appendChild(optCheck);
