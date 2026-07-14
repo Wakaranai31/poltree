@@ -782,10 +782,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (categoryBuilder.links) {
-            categoryBuilder.links.innerHTML = '';
+            const checkboxes = categoryBuilder.links.querySelectorAll('[data-category-builder-link-checkbox]');
+            checkboxes.forEach(function (cb) {
+                cb.checked = false;
+                const p = cb.parentElement;
+                p.classList.remove('bg-[#080d5f]/5', 'text-[#080d5f]');
+            });
         }
-
-        updateCategoryBuilderEmptyState();
     };
 
     const closeCategoryBuilder = function () {
@@ -847,20 +850,20 @@ document.addEventListener('DOMContentLoaded', function () {
             return getResolvedCategoryForTrigger(card).toLowerCase() === categoryName.toLowerCase();
         });
 
-        // Add preselected rows
-        matchedCards.forEach(function (card) {
-            const title = card.dataset.title || '';
-            const row = buildCategoryLinkRow(title);
-            if (categoryBuilder.links) {
-                categoryBuilder.links.appendChild(row);
-                const input = row.querySelector('[data-category-builder-link-input]');
-                if (input) {
-                    initPremiumSelect(input);
-                }
-            }
+        // Precheck checkboxes
+        const matchedTitles = matchedCards.map(function (c) {
+            return (c.dataset.title || '').toLowerCase();
         });
-
-        updateCategoryBuilderEmptyState();
+        if (categoryBuilder.links) {
+            const checkboxes = categoryBuilder.links.querySelectorAll('[data-category-builder-link-checkbox]');
+            checkboxes.forEach(function (cb) {
+                if (matchedTitles.includes(cb.value.toLowerCase())) {
+                    cb.checked = true;
+                    const p = cb.parentElement;
+                    p.classList.add('bg-[#080d5f]/5', 'text-[#080d5f]');
+                }
+            });
+        }
 
         // Update modal title for edit mode
         const modalTitle = categoryBuilder.modal.querySelector('[data-category-builder-modal-title]');
@@ -919,7 +922,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return [];
         }
 
-        return Array.from(categoryBuilder.links.querySelectorAll('[data-category-builder-link-input]'))
+        return Array.from(categoryBuilder.links.querySelectorAll('[data-category-builder-link-checkbox]:checked'))
             .map(function (input) {
                 return normalizeCategoryName(input.value);
             })
@@ -1265,29 +1268,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (categoryBuilder.addLinkButton) {
-        categoryBuilder.addLinkButton.addEventListener('click', function () {
-            if (!categoryBuilder.links) {
-                return;
-            }
 
-            const row = buildCategoryLinkRow('');
-
-            categoryBuilder.links.appendChild(row);
-
-            const input = row.querySelector('[data-category-builder-link-input]');
-            if (input) {
-                initPremiumSelect(input);
-            }
-
-            updateCategoryBuilderEmptyState();
-
-            const trigger = row.querySelector('.premium-select-trigger');
-            if (trigger) {
-                trigger.focus();
-            }
-        });
-    }
 
     if (categoryBuilder.resetButton) {
         categoryBuilder.resetButton.addEventListener('click', function () {
@@ -1388,22 +1369,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (categoryBuilder.links) {
-        categoryBuilder.links.addEventListener('click', function (event) {
-            const removeButton = event.target.closest('[data-category-builder-link-remove]');
 
-            if (!removeButton) {
-                return;
-            }
-
-            const row = removeButton.closest('.category-builder-link-row');
-
-            if (row) {
-                row.remove();
-                updateCategoryBuilderEmptyState();
-            }
-        });
-    }
 
     if (categoryBuilder.saveButton) {
         categoryBuilder.saveButton.addEventListener('click', function () {

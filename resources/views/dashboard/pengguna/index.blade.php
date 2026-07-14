@@ -243,20 +243,17 @@ $iconPaths = config('icons');
                 </div>
             </div>
 
-            <div class="premium-modal-form-group" style="margin-bottom: 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <label class="premium-modal-label" style="margin-bottom: 0;">Link Terkait</label>
-                    <button type="button" class="cb-add-link-btn" data-category-builder-link-add>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Tambah Link
-                    </button>
+            <!-- <div class="premium-modal-form-group" style="margin-bottom: 12px;">
+                <label class="premium-modal-label">Pilih Layanan (Link)</label>
+                <div class="max-h-[200px] overflow-y-auto border border-[#080d5f]/10 rounded-xl p-3 bg-slate-50" data-category-builder-links>
+                    @foreach ($allLinkTitles as $link)
+                        <label class="modal-link-item flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all duration-200 mb-1 hover:bg-slate-100" onclick="const cb = this.querySelector('.link-checkbox'); this.classList.toggle('bg-[#080d5f]/5', cb.checked); this.classList.toggle('text-[#080d5f]', cb.checked);">
+                            <input type="checkbox" value="{{ $link }}" class="link-checkbox w-4 h-4 accent-[#080d5f]" onchange="const p = this.parentElement; p.classList.toggle('bg-[#080d5f]/5', this.checked); p.classList.toggle('text-[#080d5f]', this.checked);" data-category-builder-link-checkbox>
+                            <span class="modal-link-label text-[13px] font-semibold text-[#1e2243]">{{ $link }}</span>
+                        </label>
+                    @endforeach
                 </div>
-                <div class="cb-links-container" data-category-builder-links></div>
-                <p class="cb-empty-state" data-category-builder-empty>Belum ada link ditambahkan</p>
-            </div>
+            </div> -->
 
             <div class="premium-modal-actions">
                 <button type="button" class="premium-modal-btn btn-cancel" data-category-builder-close>Batal</button>
